@@ -8,7 +8,7 @@ The project aims to build a centralized digital ecosystem that addresses real ac
 
 # Problems We’re Solving
 
-| Problem | Current Situation | Our Proposed Solution |
+| Proble | Current Situation | Our Proposed Solution |
 | --- | --- | --- |
 | Result access is inconvenient | The official MAKAUT result portal is slow, unreliable on mobile, and lacks clarity | Built-in result viewing with a clean, intuitive UI and an integrated SGPA/CGPA calculator |
 | Study materials are disorganized | Notes and syllabus are scattered across various platforms (WhatsApp, Google Drive, etc.) | Centralized resource hub with subject-wise folders, downloadable content, and search functionality |
