@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Login - TeamNexus{% endblock %}
+
+{% block content %}
+<h1>Login</h1>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<form method="POST">
+  <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+  </div>
+  <br>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+  </div>
+  <br>
+  <button type="submit">Login</button>
+</form>
+
+<p><a href="{{ url_for('auth.register') }}">Don't have an account? Register here</a></p>
+{% endblock %}
