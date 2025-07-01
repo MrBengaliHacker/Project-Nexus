@@ -4,7 +4,7 @@
 
 {% block content %}
 <!-- Navigation -->
-<div class="navbar bg-primary text-primary-content shadow-lg">
+<div class="navbar bg-base-100/95 backdrop-blur-xl sticky top-0 z-50 shadow-lg border-b border-base-300">
   <div class="navbar-start">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -12,142 +12,308 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
         </svg>
       </div>
-      <ul tabindex="0"
-        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#programs">Programs</a></li>
-        <li><a href="#facilities">Facilities</a></li>
-        <li><a href="#admissions">Admissions</a></li>
-        <li><a href="#contact">Contact</a></li>
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-52">
+        <li><a href="#home" class="font-medium">Home</a></li>
+        <li><a href="#about" class="font-medium">About</a></li>
+        <li><a href="#programs" class="font-medium">Programs</a></li>
+        <li><a href="#facilities" class="font-medium">Facilities</a></li>
+        <li><a href="#admissions" class="font-medium">Admissions</a></li>
+        <li><a href="#contact" class="font-medium">Contact</a></li>
       </ul>
     </div>
     <a class="btn btn-ghost text-xl font-bold">
-      <i class="fas fa-graduation-cap mr-2"></i>
-      Techno BIT Smart Campus
+      <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center mr-2">
+        <i class="fas fa-graduation-cap text-white text-sm"></i>
+      </div>
+      Techno BIT
     </a>
   </div>
   <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1">
-      <li><a href="#home" class="hover:bg-primary-focus">Home</a></li>
-      <li><a href="#about" class="hover:bg-primary-focus">About</a></li>
-      <li><a href="#programs" class="hover:bg-primary-focus">Programs</a></li>
-      <li><a href="#facilities" class="hover:bg-primary-focus">Facilities</a></li>
-      <li><a href="#admissions" class="hover:bg-primary-focus">Admissions</a></li>
-      <li><a href="#contact" class="hover:bg-primary-focus">Contact</a></li>
+    <ul class="menu menu-horizontal px-1 gap-2">
+      <li><a href="#home" class="hover:text-primary font-medium rounded-lg">Home</a></li>
+      <li><a href="#about" class="hover:text-primary font-medium rounded-lg">About</a></li>
+      <li><a href="#programs" class="hover:text-primary font-medium rounded-lg">Programs</a></li>
+      <li><a href="#facilities" class="hover:text-primary font-medium rounded-lg">Facilities</a></li>
+      <li><a href="#admissions" class="hover:text-primary font-medium rounded-lg">Admissions</a></li>
+      <li><a href="#contact" class="hover:text-primary font-medium rounded-lg">Contact</a></li>
     </ul>
   </div>
-  <div class="navbar-end">
+  <div class="navbar-end gap-2">
+    <!-- Theme Toggle -->
+    <label class="swap swap-rotate btn btn-ghost btn-circle">
+      <input type="checkbox" class="theme-controller" value="dark" onchange="toggleTheme()" />
+      <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path
+          d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+      </svg>
+      <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path
+          d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+      </svg>
+    </label>
+
+    <!-- User Menu -->
     <div class="dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn btn-ghost">
-        <i class="fas fa-user-circle text-xl"></i>
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+        <div class="w-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+          <i class="fas fa-user text-white text-sm"></i>
+        </div>
       </div>
-      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
-        <li><a><i class="fas fa-sign-in-alt mr-2"></i>Student Login</a></li>
-        <li><a><i class="fas fa-chalkboard-teacher mr-2"></i>Faculty Login</a></li>
-        <li><a><i class="fas fa-user-shield mr-2"></i>Admin Login</a></li>
+      <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-box w-52">
+        <li><a class="font-medium"><i class="fas fa-sign-in-alt mr-2"></i>Student Login</a></li>
+        <li><a class="font-medium"><i class="fas fa-chalkboard-teacher mr-2"></i>Faculty Login</a></li>
+        <li><a class="font-medium"><i class="fas fa-user-shield mr-2"></i>Admin Login</a></li>
       </ul>
     </div>
   </div>
 </div>
 
 <!-- Hero Section -->
-<section id="home" class="hero min-h-screen bg-gradient-to-br from-primary to-secondary">
-  <div class="hero-content text-center text-primary-content">
-    <div class="max-w-md">
-      <h1 class="mb-5 text-5xl font-bold">Welcome to Techno BIT</h1>
-      <h2 class="mb-5 text-2xl">Techno Bengal Institute Of Technologia</h2>
-      <p class="mb-5 text-lg">Empowering minds, shaping futures through innovative technology education and smart
-        campus solutions.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <button class="btn btn-accent btn-lg">
-          <i class="fas fa-play mr-2"></i>
-          Take a Virtual Tour
-        </button>
-        <button class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-primary">
-          <i class="fas fa-file-alt mr-2"></i>
-          Apply Now
-        </button>
+<section id="home" class="hero min-h-screen relative overflow-hidden">
+  <div class="hero-overlay bg-gradient-to-br from-primary/90 via-secondary/80 to-accent/70"></div>
+  <div
+    class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center">
+  </div>
+  <div class="hero-content text-center text-white relative z-10">
+    <div class="max-w-4xl">
+      <div class="animate-fade-in-up">
+        <h1
+          class="mb-6 text-6xl md:text-7xl font-black tracking-tight bg-gradient-to-r from-white to-base-100 bg-clip-text text-transparent">
+          Welcome to Techno BIT
+        </h1>
+        <h2 class="mb-6 text-2xl md:text-3xl font-light opacity-90">
+          Techno Bengal Institute Of Technologia
+        </h2>
+        <p class="mb-8 text-lg md:text-xl opacity-80 max-w-2xl mx-auto leading-relaxed">
+          Empowering minds, shaping futures through innovative technology education and
+          smart campus solutions in the heart of digital revolution.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button
+            class="btn btn-primary btn-lg rounded-full px-8 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all">
+            <i class="fas fa-play mr-2"></i>
+            Take a Virtual Tour
+          </button>
+          <button
+            class="btn btn-outline btn-lg text-white border-white rounded-full px-8 hover:bg-white hover:text-primary hover:border-white shadow-xl">
+            <i class="fas fa-file-alt mr-2"></i>
+            Apply Now
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="hero-overlay bg-opacity-20"></div>
+
+  <!-- Floating Elements -->
+  <div class="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full animate-float"></div>
+  <div class="absolute bottom-20 right-10 w-16 h-16 bg-white/10 rounded-full animate-float-delayed"></div>
+  <div class="absolute top-1/2 left-1/4 w-12 h-12 bg-white/10 rounded-full animate-float-slow"></div>
 </section>
 
-<!-- Quick Stats -->
-<section class="py-12 bg-base-200">
+<!-- Quick Stats with Modern Design -->
+<section class="py-16 bg-base-100 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5"></div>
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div
+        class="stat-card bg-gradient-to-br from-primary to-primary/80 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-5xl opacity-20"><i class="fas fa-users"></i></div>
+          <div class="text-right">
+            <div class="text-3xl font-bold">5,000+</div>
+            <div class="text-sm opacity-80">Students Enrolled</div>
+          </div>
+        </div>
+        <div class="text-sm opacity-90">Across all programs</div>
+      </div>
+
+      <div
+        class="stat-card bg-gradient-to-br from-secondary to-secondary/80 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-5xl opacity-20"><i class="fas fa-chalkboard-teacher"></i></div>
+          <div class="text-right">
+            <div class="text-3xl font-bold">300+</div>
+            <div class="text-sm opacity-80">Faculty Members</div>
+          </div>
+        </div>
+        <div class="text-sm opacity-90">Expert educators</div>
+      </div>
+
+      <div
+        class="stat-card bg-gradient-to-br from-accent to-accent/80 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-5xl opacity-20"><i class="fas fa-book-open"></i></div>
+          <div class="text-right">
+            <div class="text-3xl font-bold">25+</div>
+            <div class="text-sm opacity-80">Programs Offered</div>
+          </div>
+        </div>
+        <div class="text-sm opacity-90">Undergraduate & Graduate</div>
+      </div>
+
+      <div
+        class="stat-card bg-gradient-to-br from-success to-success/80 text-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="text-5xl opacity-20"><i class="fas fa-chart-line"></i></div>
+          <div class="text-right">
+            <div class="text-3xl font-bold">95%</div>
+            <div class="text-sm opacity-80">Placement Rate</div>
+          </div>
+        </div>
+        <div class="text-sm opacity-90">Industry ready graduates</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Campus Gallery Section -->
+<section class="py-20 bg-base-200">
   <div class="container mx-auto px-4">
-    <div class="stats shadow w-full">
-      <div class="stat place-items-center">
-        <div class="stat-title">Students Enrolled</div>
-        <div class="stat-value text-primary">5,000+</div>
-        <div class="stat-desc">Across all programs</div>
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Campus Gallery
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-2xl mx-auto">
+        Explore our beautiful campus and state-of-the-art facilities through this visual journey
+      </p>
+    </div>
+
+    <div class="carousel w-full max-w-6xl mx-auto rounded-3xl shadow-2xl overflow-hidden">
+      <div id="slide1" class="carousel-item relative w-full">
+        <img
+          src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          class="w-full h-96 object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div class="absolute bottom-8 left-8 text-white">
+          <h3 class="text-2xl font-bold mb-2">Main Campus Building</h3>
+          <p class="opacity-90">Modern architecture meets academic excellence</p>
+        </div>
+        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+          <a href="#slide4" class="btn btn-circle btn-primary shadow-lg">❮</a>
+          <a href="#slide2" class="btn btn-circle btn-primary shadow-lg">❯</a>
+        </div>
       </div>
-      <div class="stat place-items-center">
-        <div class="stat-title">Faculty Members</div>
-        <div class="stat-value text-secondary">300+</div>
-        <div class="stat-desc">Expert educators</div>
+      <div id="slide2" class="carousel-item relative w-full">
+        <img
+          src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          class="w-full h-96 object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div class="absolute bottom-8 left-8 text-white">
+          <h3 class="text-2xl font-bold mb-2">Advanced Laboratories</h3>
+          <p class="opacity-90">Cutting-edge research and learning facilities</p>
+        </div>
+        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+          <a href="#slide1" class="btn btn-circle btn-primary shadow-lg">❮</a>
+          <a href="#slide3" class="btn btn-circle btn-primary shadow-lg">❯</a>
+        </div>
       </div>
-      <div class="stat place-items-center">
-        <div class="stat-title">Programs Offered</div>
-        <div class="stat-value text-accent">25+</div>
-        <div class="stat-desc">Undergraduate & Graduate</div>
+      <div id="slide3" class="carousel-item relative w-full">
+        <img
+          src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          class="w-full h-96 object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div class="absolute bottom-8 left-8 text-white">
+          <h3 class="text-2xl font-bold mb-2">Digital Library</h3>
+          <p class="opacity-90">Vast collection of digital and physical resources</p>
+        </div>
+        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+          <a href="#slide2" class="btn btn-circle btn-primary shadow-lg">❮</a>
+          <a href="#slide4" class="btn btn-circle btn-primary shadow-lg">❯</a>
+        </div>
       </div>
-      <div class="stat place-items-center">
-        <div class="stat-title">Placement Rate</div>
-        <div class="stat-value text-success">95%</div>
-        <div class="stat-desc">Industry ready graduates</div>
+      <div id="slide4" class="carousel-item relative w-full">
+        <img
+          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          class="w-full h-96 object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+        <div class="absolute bottom-8 left-8 text-white">
+          <h3 class="text-2xl font-bold mb-2">Student Life</h3>
+          <p class="opacity-90">Vibrant campus life and student activities</p>
+        </div>
+        <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
+          <a href="#slide3" class="btn btn-circle btn-primary shadow-lg">❮</a>
+          <a href="#slide1" class="btn btn-circle btn-primary shadow-lg">❯</a>
+        </div>
       </div>
+    </div>
+
+    <!-- Carousel Indicators -->
+    <div class="flex justify-center mt-8 gap-2">
+      <a href="#slide1" class="w-3 h-3 rounded-full bg-primary/30 hover:bg-primary transition-colors"></a>
+      <a href="#slide2" class="w-3 h-3 rounded-full bg-primary/30 hover:bg-primary transition-colors"></a>
+      <a href="#slide3" class="w-3 h-3 rounded-full bg-primary/30 hover:bg-primary transition-colors"></a>
+      <a href="#slide4" class="w-3 h-3 rounded-full bg-primary/30 hover:bg-primary transition-colors"></a>
     </div>
   </div>
 </section>
 
 <!-- About Section -->
-<section id="about" class="py-20 bg-base-100">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-4">About Techno BIT</h2>
-      <p class="text-lg text-base-content/70 max-w-3xl mx-auto">
-        Established as a premier institution for technological education, Techno Bengal Institute Of Technologia
-        is committed to fostering innovation, research, and academic excellence.
+<section id="about" class="py-20 bg-base-100 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        About Techno BIT
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-4xl mx-auto leading-relaxed">
+        Established as a premier institution for technological education, Techno Bengal Institute Of Technologia is
+        committed to fostering innovation, research, and academic excellence in the digital age.
       </p>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div>
-        <div class="mockup-window border bg-base-300">
-          <div class="flex justify-center px-4 py-16 bg-gradient-to-br from-primary/20 to-secondary/20">
-            <i class="fas fa-university text-6xl text-primary"></i>
-          </div>
-        </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="relative">
+        <div class="absolute -inset-4 bg-gradient-to-r from-primary to-secondary rounded-3xl opacity-20 blur-lg"></div>
+        <img
+          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+          class="relative rounded-3xl shadow-2xl w-full h-96 object-cover" />
       </div>
-      <div class="space-y-6">
-        <div class="flex items-start space-x-4">
-          <div class="badge badge-primary badge-lg">
-            <i class="fas fa-lightbulb"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-semibold mb-2">Innovation First</h3>
-            <p class="text-base-content/70">Cutting-edge curriculum designed to meet industry demands and future
-              challenges.</p>
-          </div>
-        </div>
-        <div class="flex items-start space-x-4">
-          <div class="badge badge-secondary badge-lg">
-            <i class="fas fa-users"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-semibold mb-2">Expert Faculty</h3>
-            <p class="text-base-content/70">Renowned professors and industry experts guiding student success.</p>
+
+      <div class="space-y-8">
+        <div class="group">
+          <div class="flex items-start space-x-6">
+            <div
+              class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-primary to-primary/80 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <i class="fas fa-lightbulb text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">Innovation First</h3>
+              <p class="text-base-content/70 text-lg leading-relaxed">
+                Cutting-edge curriculum designed to meet industry demands and future challenges with hands-on learning
+                experiences.
+              </p>
+            </div>
           </div>
         </div>
-        <div class="flex items-start space-x-4">
-          <div class="badge badge-accent badge-lg">
-            <i class="fas fa-laptop-code"></i>
+
+        <div class="group">
+          <div class="flex items-start space-x-6">
+            <div
+              class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-secondary to-secondary/80 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <i class="fas fa-users text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-3 group-hover:text-secondary transition-colors">Expert Faculty</h3>
+              <p class="text-base-content/70 text-lg leading-relaxed">
+                Renowned professors and industry experts dedicated to guiding student success and fostering innovation.
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 class="text-xl font-semibold mb-2">Smart Campus</h3>
-            <p class="text-base-content/70">State-of-the-art facilities with IoT integration and digital learning
-              environments.</p>
+        </div>
+
+        <div class="group">
+          <div class="flex items-start space-x-6">
+            <div
+              class="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-accent to-accent/80 text-white rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+              <i class="fas fa-laptop-code text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold mb-3 group-hover:text-accent transition-colors">Smart Campus</h3>
+              <p class="text-base-content/70 text-lg leading-relaxed">
+                State-of-the-art facilities with IoT integration, digital learning environments, and sustainable
+                technology.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -158,109 +324,72 @@
 <!-- Programs Section -->
 <section id="programs" class="py-20 bg-base-200">
   <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-4">Academic Programs</h2>
-      <p class="text-lg text-base-content/70">Comprehensive programs designed for the digital age</p>
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Academic Programs
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
+        Comprehensive programs designed for the digital age, preparing students for tomorrow's challenges
+      </p>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <div class="card-body">
-          <div class="text-center mb-4">
-            <div class="avatar placeholder">
-              <div class="bg-primary text-primary-content rounded-full w-16">
-                <i class="fas fa-code text-2xl"></i>
-              </div>
-            </div>
+      <!-- Program Card 1 -->
+      <div
+        class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-4 group border-t-4 border-primary">
+        <div class="card-body p-8 text-center">
+          <div
+            class="mx-auto w-20 h-20 bg-gradient-to-br from-primary to-primary/80 text-white rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fas fa-code text-3xl"></i>
           </div>
-          <h3 class="card-title justify-center">Computer Science & Engineering</h3>
-          <p class="text-center text-base-content/70">B.Tech, M.Tech, Ph.D programs in cutting-edge computing
-            technologies.</p>
-          <div class="card-actions justify-center mt-4">
-            <button class="btn btn-primary btn-sm">Learn More</button>
-          </div>
-        </div>
-      </div>
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <div class="card-body">
-          <div class="text-center mb-4">
-            <div class="avatar placeholder">
-              <div class="bg-secondary text-secondary-content rounded-full w-16">
-                <i class="fas fa-microchip text-2xl"></i>
-              </div>
-            </div>
-          </div>
-          <h3 class="card-title justify-center">Electronics & Communication</h3>
-          <p class="text-center text-base-content/70">Advanced programs in electronics, telecommunications, and
-            embedded systems.</p>
-          <div class="card-actions justify-center mt-4">
-            <button class="btn btn-secondary btn-sm">Learn More</button>
-          </div>
-        </div>
-      </div>
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <div class="card-body">
-          <div class="text-center mb-4">
-            <div class="avatar placeholder">
-              <div class="bg-accent text-accent-content rounded-full w-16">
-                <i class="fas fa-robot text-2xl"></i>
-              </div>
-            </div>
-          </div>
-          <h3 class="card-title justify-center">Artificial Intelligence & ML</h3>
-          <p class="text-center text-base-content/70">Specialized programs in AI, machine learning, and data science.
+          <h3 class="card-title text-2xl justify-center mb-4">Computer Science & Engineering</h3>
+          <p class="text-base-content/70 mb-6 leading-relaxed">
+            B.Tech, M.Tech, Ph.D programs in cutting-edge computing technologies, AI, and software development.
           </p>
-          <div class="card-actions justify-center mt-4">
-            <button class="btn btn-accent btn-sm">Learn More</button>
+          <div class="card-actions justify-center">
+            <button class="btn btn-primary btn-outline hover:btn-primary px-8 rounded-full">
+              Explore Program
+            </button>
           </div>
         </div>
       </div>
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <div class="card-body">
-          <div class="text-center mb-4">
-            <div class="avatar placeholder">
-              <div class="bg-success text-success-content rounded-full w-16">
-                <i class="fas fa-shield-alt text-2xl"></i>
-              </div>
-            </div>
+
+      <!-- Program Card 2 -->
+      <div
+        class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-4 group border-t-4 border-secondary">
+        <div class="card-body p-8 text-center">
+          <div
+            class="mx-auto w-20 h-20 bg-gradient-to-br from-secondary to-secondary/80 text-white rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fas fa-microchip text-3xl"></i>
           </div>
-          <h3 class="card-title justify-center">Cybersecurity</h3>
-          <p class="text-center text-base-content/70">Comprehensive cybersecurity programs for digital protection.</p>
-          <div class="card-actions justify-center mt-4">
-            <button class="btn btn-success btn-sm">Learn More</button>
-          </div>
-        </div>
-      </div>
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <div class="card-body">
-          <div class="text-center mb-4">
-            <div class="avatar placeholder">
-              <div class="bg-warning text-warning-content rounded-full w-16">
-                <i class="fas fa-chart-line text-2xl"></i>
-              </div>
-            </div>
-          </div>
-          <h3 class="card-title justify-center">Business Analytics</h3>
-          <p class="text-center text-base-content/70">MBA and specialized programs in business intelligence and
-            analytics.</p>
-          <div class="card-actions justify-center mt-4">
-            <button class="btn btn-warning btn-sm">Learn More</button>
+          <h3 class="card-title text-2xl justify-center mb-4">Electronics & Communication</h3>
+          <p class="text-base-content/70 mb-6 leading-relaxed">
+            Advanced programs in electronics, telecommunications, embedded systems, and IoT technologies.
+          </p>
+          <div class="card-actions justify-center">
+            <button class="btn btn-secondary btn-outline hover:btn-secondary px-8 rounded-full">
+              Explore Program
+            </button>
           </div>
         </div>
       </div>
-      <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <div class="card-body">
-          <div class="text-center mb-4">
-            <div class="avatar placeholder">
-              <div class="bg-info text-info-content rounded-full w-16">
-                <i class="fas fa-cloud text-2xl"></i>
-              </div>
-            </div>
+
+      <!-- Program Card 3 -->
+      <div
+        class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-4 group border-t-4 border-accent">
+        <div class="card-body p-8 text-center">
+          <div
+            class="mx-auto w-20 h-20 bg-gradient-to-br from-accent to-accent/80 text-white rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+            <i class="fas fa-robot text-3xl"></i>
           </div>
-          <h3 class="card-title justify-center">Cloud Computing</h3>
-          <p class="text-center text-base-content/70">Specialized programs in cloud architecture and distributed
-            systems.</p>
-          <div class="card-actions justify-center mt-4">
-            <button class="btn btn-info btn-sm">Learn More</button>
+          <h3 class="card-title text-2xl justify-center mb-4">Artificial Intelligence & ML</h3>
+          <p class="text-base-content/70 mb-6 leading-relaxed">
+            Specialized programs in AI, machine learning, data science, and neural network technologies.
+          </p>
+          <div class="card-actions justify-center">
+            <button class="btn btn-accent btn-outline hover:btn-accent px-8 rounded-full">
+              Explore Program
+            </button>
           </div>
         </div>
       </div>
@@ -271,37 +400,65 @@
 <!-- Facilities Section -->
 <section id="facilities" class="py-20 bg-base-100">
   <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-4">Smart Campus Facilities</h2>
-      <p class="text-lg text-base-content/70">World-class infrastructure for modern education</p>
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Smart Campus Facilities
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
+        World-class infrastructure designed for modern education and research excellence
+      </p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="card bg-primary text-primary-content">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-flask text-4xl mb-4"></i>
-          <h3 class="card-title">Research Labs</h3>
-          <p>Advanced laboratories equipped with cutting-edge technology</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="group">
+        <div
+          class="card bg-gradient-to-br from-primary/10 to-primary/5 hover:from-primary hover:to-primary/90 text-center p-8 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-primary/20">
+          <div
+            class="w-16 h-16 mx-auto mb-6 bg-primary/20 group-hover:bg-white rounded-2xl flex items-center justify-center">
+            <i class="fas fa-flask text-3xl text-primary group-hover:text-primary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-white">Research Labs</h3>
+          <p class="text-base-content/70 group-hover:text-white/90 text-sm">Advanced research facilities with
+            cutting-edge equipment</p>
         </div>
       </div>
-      <div class="card bg-secondary text-secondary-content">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-book text-4xl mb-4"></i>
-          <h3 class="card-title">Digital Library</h3>
-          <p>Extensive digital resources and study spaces</p>
+
+      <div class="group">
+        <div
+          class="card bg-gradient-to-br from-secondary/10 to-secondary/5 hover:from-secondary hover:to-secondary/90 text-center p-8 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-secondary/20">
+          <div
+            class="w-16 h-16 mx-auto mb-6 bg-secondary/20 group-hover:bg-white rounded-2xl flex items-center justify-center">
+            <i class="fas fa-book text-3xl text-secondary group-hover:text-secondary"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-white">Digital Library</h3>
+          <p class="text-base-content/70 group-hover:text-white/90 text-sm">Vast digital resources and collaborative
+            study spaces</p>
         </div>
       </div>
-      <div class="card bg-accent text-accent-content">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-wifi text-4xl mb-4"></i>
-          <h3 class="card-title">Smart Classrooms</h3>
-          <p>IoT-enabled interactive learning environments</p>
+
+      <div class="group">
+        <div
+          class="card bg-gradient-to-br from-accent/10 to-accent/5 hover:from-accent hover:to-accent/90 text-center p-8 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-accent/20">
+          <div
+            class="w-16 h-16 mx-auto mb-6 bg-accent/20 group-hover:bg-white rounded-2xl flex items-center justify-center">
+            <i class="fas fa-wifi text-3xl text-accent group-hover:text-accent"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-white">Smart Classrooms</h3>
+          <p class="text-base-content/70 group-hover:text-white/90 text-sm">Technology-enabled interactive learning
+            environments</p>
         </div>
       </div>
-      <div class="card bg-success text-success-content">
-        <div class="card-body items-center text-center">
-          <i class="fas fa-dumbbell text-4xl mb-4"></i>
-          <h3 class="card-title">Sports Complex</h3>
-          <p>Modern sports facilities and fitness centers</p>
+
+      <div class="group">
+        <div
+          class="card bg-gradient-to-br from-info/10 to-info/5 hover:from-info hover:to-info/90 text-center p-8 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border border-info/20">
+          <div
+            class="w-16 h-16 mx-auto mb-6 bg-info/20 group-hover:bg-white rounded-2xl flex items-center justify-center">
+            <i class="fas fa-dumbbell text-3xl text-info group-hover:text-info"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 group-hover:text-white">Sports Complex</h3>
+          <p class="text-base-content/70 group-hover:text-white/90 text-sm">Modern sports facilities and fitness centers
+          </p>
         </div>
       </div>
     </div>
@@ -311,73 +468,123 @@
 <!-- Admissions Section -->
 <section id="admissions" class="py-20 bg-base-200">
   <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-4">Admissions</h2>
-      <p class="text-lg text-base-content/70">Start your journey with us</p>
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Admissions
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
+        Begin your journey towards technological excellence and innovation
+      </p>
     </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h3 class="card-title text-2xl mb-6">
-            <i class="fas fa-calendar-alt text-primary mr-2"></i>
+      <!-- Important Dates -->
+      <div class="card bg-base-100 shadow-2xl border-t-4 border-primary">
+        <div class="card-body p-8">
+          <h3 class="card-title text-3xl mb-8 flex items-center">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mr-4">
+              <i class="fas fa-calendar-alt text-white"></i>
+            </div>
             Important Dates
           </h3>
-          <div class="space-y-4">
-            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-              <span class="font-semibold">Application Opens</span>
-              <span class="badge badge-primary">January 15, 2025</span>
+
+          <div class="space-y-6">
+            <div class="flex items-center p-4 bg-primary/5 rounded-xl border-l-4 border-primary">
+              <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-door-open text-primary"></i>
+              </div>
+              <div>
+                <div class="font-bold text-lg">Application Opens</div>
+                <div class="text-primary font-semibold">January 15, 2025</div>
+              </div>
             </div>
-            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-              <span class="font-semibold">Application Deadline</span>
-              <span class="badge badge-warning">March 30, 2025</span>
+
+            <div class="flex items-center p-4 bg-secondary/5 rounded-xl border-l-4 border-secondary">
+              <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-clock text-secondary"></i>
+              </div>
+              <div>
+                <div class="font-bold text-lg">Application Deadline</div>
+                <div class="text-secondary font-semibold">March 30, 2025</div>
+              </div>
             </div>
-            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-              <span class="font-semibold">Entrance Exam</span>
-              <span class="badge badge-info">April 15, 2025</span>
+
+            <div class="flex items-center p-4 bg-accent/5 rounded-xl border-l-4 border-accent">
+              <div class="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-pencil-alt text-accent"></i>
+              </div>
+              <div>
+                <div class="font-bold text-lg">Entrance Exam</div>
+                <div class="text-accent font-semibold">April 15, 2025</div>
+              </div>
             </div>
-            <div class="flex justify-between items-center p-3 bg-base-200 rounded-lg">
-              <span class="font-semibold">Results Announced</span>
-              <span class="badge badge-success">May 20, 2025</span>
+
+            <div class="flex items-center p-4 bg-success/5 rounded-xl border-l-4 border-success">
+              <div class="w-12 h-12 bg-success/20 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-trophy text-success"></i>
+              </div>
+              <div>
+                <div class="font-bold text-lg">Results Announced</div>
+                <div class="text-success font-semibold">May 20, 2025</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h3 class="card-title text-2xl mb-6">
-            <i class="fas fa-file-alt text-secondary mr-2"></i>
+
+      <!-- Application Process -->
+      <div class="card bg-base-100 shadow-2xl border-t-4 border-secondary">
+        <div class="card-body p-8">
+          <h3 class="card-title text-3xl mb-8 flex items-center">
+            <div class="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mr-4">
+              <i class="fas fa-file-alt text-white"></i>
+            </div>
             Application Process
           </h3>
-          <div class="steps steps-vertical">
-            <div class="step step-primary">
-              <div class="step-content">
-                <h4 class="font-semibold">Online Registration</h4>
-                <p class="text-sm text-base-content/70">Create account and fill application form</p>
+
+          <div class="space-y-6">
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">1
+              </div>
+              <div class="flex-1 p-4 bg-primary/5 rounded-xl">
+                <div class="font-semibold">Online Registration</div>
+                <div class="text-sm text-base-content/70">Create your account and fill basic details</div>
               </div>
             </div>
-            <div class="step step-primary">
-              <div class="step-content">
-                <h4 class="font-semibold">Document Upload</h4>
-                <p class="text-sm text-base-content/70">Upload required documents and certificates</p>
+
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center text-white font-bold mr-4">
+                2</div>
+              <div class="flex-1 p-4 bg-secondary/5 rounded-xl">
+                <div class="font-semibold">Document Upload</div>
+                <div class="text-sm text-base-content/70">Upload required academic documents</div>
               </div>
             </div>
-            <div class="step step-primary">
-              <div class="step-content">
-                <h4 class="font-semibold">Fee Payment</h4>
-                <p class="text-sm text-base-content/70">Pay application fee online</p>
+
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center text-white font-bold mr-4">3
+              </div>
+              <div class="flex-1 p-4 bg-accent/5 rounded-xl">
+                <div class="font-semibold">Fee Payment</div>
+                <div class="text-sm text-base-content/70">Pay application fee online</div>
               </div>
             </div>
-            <div class="step">
-              <div class="step-content">
-                <h4 class="font-semibold">Entrance Exam</h4>
-                <p class="text-sm text-base-content/70">Appear for entrance examination</p>
+
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-success rounded-full flex items-center justify-center text-white font-bold mr-4">4
+              </div>
+              <div class="flex-1 p-4 bg-success/5 rounded-xl">
+                <div class="font-semibold">Entrance Exam & Interview</div>
+                <div class="text-sm text-base-content/70">Appear for entrance test and interview</div>
               </div>
             </div>
           </div>
-          <div class="card-actions justify-center mt-6">
-            <button class="btn btn-primary btn-lg">
-              <i class="fas fa-external-link-alt mr-2"></i>
-              Apply Online
+
+          <div class="card-actions justify-center mt-8">
+            <button
+              class="btn btn-primary btn-wide btn-lg rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+              <i class="fas fa-arrow-right mr-2"></i>
+              Apply Online Now
             </button>
           </div>
         </div>
@@ -389,168 +596,219 @@
 <!-- News & Events -->
 <section class="py-20 bg-base-100">
   <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-4">Latest News & Events</h2>
-      <p class="text-lg text-base-content/70">Stay updated with campus happenings</p>
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Latest News & Events
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
+        Stay updated with the latest happenings, achievements, and upcoming events at our campus
+      </p>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <article class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <figure class="px-6 pt-6">
+      <div
+        class="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group">
+        <figure class="relative overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            alt="News" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500" />
           <div
-            class="w-full h-48 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-xl flex items-center justify-center">
-            <i class="fas fa-trophy text-4xl text-primary"></i>
+            class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           </div>
         </figure>
-        <div class="card-body">
-          <div class="badge badge-primary badge-sm mb-2">Achievement</div>
-          <h3 class="card-title">National Coding Championship Winner</h3>
-          <p class="text-sm text-base-content/70">Our students won first place in the national coding competition...
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between mb-3">
+            <div class="badge badge-primary font-semibold">Achievement</div>
+            <div class="text-sm text-base-content/60">Dec 15, 2024</div>
+          </div>
+          <h3 class="card-title text-xl mb-3 hover:text-primary transition-colors">
+            National Coding Championship Winner
+          </h3>
+          <p class="text-base-content/70 mb-4 leading-relaxed">
+            Our computer science students secured first place in the prestigious national coding competition, showcasing
+            exceptional programming skills...
           </p>
-          <div class="card-actions justify-between items-center mt-4">
-            <span class="text-xs text-base-content/60">June 20, 2025</span>
-            <button class="btn btn-primary btn-sm">Read More</button>
+          <div class="card-actions justify-end">
+            <button class="btn btn-primary btn-sm rounded-full px-6 hover:shadow-lg">
+              Read More
+            </button>
           </div>
         </div>
-      </article>
-      <article class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <figure class="px-6 pt-6">
+      </div>
+
+      <div
+        class="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group">
+        <figure class="relative overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            alt="News" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500" />
           <div
-            class="w-full h-48 bg-gradient-to-br from-secondary/20 to-accent/20 rounded-xl flex items-center justify-center">
-            <i class="fas fa-microscope text-4xl text-secondary"></i>
+            class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           </div>
         </figure>
-        <div class="card-body">
-          <div class="badge badge-secondary badge-sm mb-2">Research</div>
-          <h3 class="card-title">New AI Research Lab Inaugurated</h3>
-          <p class="text-sm text-base-content/70">State-of-the-art AI research facility opens with latest equipment...
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between mb-3">
+            <div class="badge badge-secondary font-semibold">Research</div>
+            <div class="text-sm text-base-content/60">Dec 10, 2024</div>
+          </div>
+          <h3 class="card-title text-xl mb-3 hover:text-secondary transition-colors">
+            New AI Research Lab Inaugurated
+          </h3>
+          <p class="text-base-content/70 mb-4 leading-relaxed">
+            State-of-the-art AI research facility opens with cutting-edge equipment and collaborative spaces for
+            advanced research projects...
           </p>
-          <div class="card-actions justify-between items-center mt-4">
-            <span class="text-xs text-base-content/60">June 18, 2025</span>
-            <button class="btn btn-secondary btn-sm">Read More</button>
+          <div class="card-actions justify-end">
+            <button class="btn btn-secondary btn-sm rounded-full px-6 hover:shadow-lg">
+              Read More
+            </button>
           </div>
         </div>
-      </article>
-      <article class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-        <figure class="px-6 pt-6">
+      </div>
+
+      <div
+        class="card bg-base-200 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group">
+        <figure class="relative overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            alt="News" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500" />
           <div
-            class="w-full h-48 bg-gradient-to-br from-accent/20 to-success/20 rounded-xl flex items-center justify-center">
-            <i class="fas fa-calendar-check text-4xl text-accent"></i>
+            class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           </div>
         </figure>
-        <div class="card-body">
-          <div class="badge badge-accent badge-sm mb-2">Event</div>
-          <h3 class="card-title">Tech Fest 2025 Announcement</h3>
-          <p class="text-sm text-base-content/70">Annual technical festival featuring competitions, workshops...</p>
-          <div class="card-actions justify-between items-center mt-4">
-            <span class="text-xs text-base-content/60">June 15, 2025</span>
-            <button class="btn btn-accent btn-sm">Read More</button>
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between mb-3">
+            <div class="badge badge-accent font-semibold">Event</div>
+            <div class="text-sm text-base-content/60">Dec 5, 2024</div>
+          </div>
+          <h3 class="card-title text-xl mb-3 hover:text-accent transition-colors">
+            Tech Fest 2025 Announcement
+          </h3>
+          <p class="text-base-content/70 mb-4 leading-relaxed">
+            Annual technical festival featuring competitions, workshops, and tech talks by industry leaders from around
+            the world...
+          </p>
+          <div class="card-actions justify-end">
+            <button class="btn btn-accent btn-sm rounded-full px-6 hover:shadow-lg">
+              Read More
+            </button>
           </div>
         </div>
+      </div>
     </div>
-  </div>
   </div>
 </section>
 
 <!-- Contact Section -->
 <section id="contact" class="py-20 bg-base-200">
   <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-4xl font-bold mb-4">Contact Us</h2>
-      <p class="text-lg text-base-content/70">Get in touch with us</p>
+    <div class="text-center mb-16">
+      <h2 class="text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Contact Us
+      </h2>
+      <p class="text-xl text-base-content/70 max-w-3xl mx-auto">
+        Ready to join our community? Get in touch with us for any inquiries or assistance
+      </p>
     </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-      <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h3 class="card-title text-2xl mb-6">Send us a Message</h3>
-          <form class="space-y-4">
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Name</span>
-              </label>
-              <input type="text" placeholder="Your Name" class="input input-bordered" />
+      <!-- Contact Form -->
+      <div class="card bg-base-100 shadow-2xl border-t-4 border-primary">
+        <div class="card-body p-8">
+          <h3 class="text-3xl font-bold mb-8 flex items-center">
+            <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mr-4">
+              <i class="fas fa-envelope text-white"></i>
             </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Email</span>
-              </label>
-              <input type="email" placeholder="your.email@example.com" class="input input-bordered" />
+            Send us a Message
+          </h3>
+          <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input type="text" placeholder="Your Name" class="input input-bordered input-lg w-full rounded-xl" />
+              <input type="email" placeholder="Your Email" class="input input-bordered input-lg w-full rounded-xl" />
             </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Subject</span>
-              </label>
-              <select class="select select-bordered">
-                <option disabled selected>Select Subject</option>
-                <option>Admissions Inquiry</option>
-                <option>Academic Information</option>
-                <option>Technical Support</option>
-                <option>General Query</option>
-              </select>
-            </div>
-            <div class="form-control">
-              <label class="label">
-                <span class="label-text">Message</span>
-              </label>
-              <textarea class="textarea textarea-bordered h-24" placeholder="Your message..."></textarea>
-            </div>
-            <div class="form-control mt-6">
-              <button class="btn btn-primary">
-                <i class="fas fa-paper-plane mr-2"></i>
-                Send Message
-              </button>
-            </div>
+            <select class="select select-bordered select-lg w-full rounded-xl">
+              <option disabled selected>Select Subject</option>
+              <option>Admissions Inquiry</option>
+              <option>Academic Information</option>
+              <option>Campus Visit</option>
+              <option>General Query</option>
+            </select>
+            <textarea class="textarea textarea-bordered textarea-lg h-32 w-full rounded-xl"
+              placeholder="Your message..."></textarea>
+            <button
+              class="btn btn-primary btn-lg w-full rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all">
+              <i class="fas fa-paper-plane mr-2"></i>
+              Send Message
+            </button>
           </form>
         </div>
       </div>
+
+      <!-- Contact Information -->
       <div class="space-y-6">
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h3 class="card-title mb-4">
-              <i class="fas fa-map-marker-alt text-primary mr-2"></i>
+        <div class="card bg-base-100 shadow-xl border-l-4 border-primary">
+          <div class="card-body p-6">
+            <h3 class="card-title text-xl mb-4 flex items-center">
+              <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3">
+                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+              </div>
               Campus Address
             </h3>
-            <p class="text-base-content/70">
-              Techno Bengal Institute Of Technologia<br>
-              Salt Lake City, Sector V<br>
-              Kolkata, West Bengal 700091<br>
-              India
-            </p>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="card bg-primary text-primary-content">
-            <div class="card-body items-center text-center p-6">
-              <i class="fas fa-phone text-2xl mb-2"></i>
-              <h4 class="font-semibold">Phone</h4>
-              <p class="text-sm">+91 33 1234-5678</p>
-            </div>
-          </div>
-          <div class="card bg-secondary text-secondary-content">
-            <div class="card-body items-center text-center p-6">
-              <i class="fas fa-envelope text-2xl mb-2"></i>
-              <h4 class="font-semibold">Email</h4>
-              <p class="text-sm">info@technobit.edu.in</p>
+            <div class="pl-11">
+              <p class="leading-relaxed">
+                Techno Bengal Institute Of Technologia<br>
+                Salt Lake City, Sector V<br>
+                Kolkata, West Bengal 700091, India
+              </p>
             </div>
           </div>
         </div>
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h3 class="card-title mb-4">
-              <i class="fas fa-clock text-accent mr-2"></i>
+
+        <div class="card bg-base-100 shadow-xl border-l-4 border-secondary">
+          <div class="card-body p-6">
+            <h3 class="card-title text-xl mb-4 flex items-center">
+              <div class="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center mr-3">
+                <i class="fas fa-clock text-white text-sm"></i>
+              </div>
               Office Hours
             </h3>
-            <div class="space-y-2 text-base-content/70">
+            <div class="pl-11 space-y-2">
               <div class="flex justify-between">
-                <span>Monday - Friday</span>
-                <span>9:00 AM - 6:00 PM</span>
+                <span class="font-medium">Monday - Friday</span>
+                <span class="font-semibold">9:00 AM - 6:00 PM</span>
               </div>
               <div class="flex justify-between">
-                <span>Saturday</span>
-                <span>9:00 AM - 2:00 PM</span>
+                <span class="font-medium">Saturday</span>
+                <span class="font-semibold">9:00 AM - 2:00 PM</span>
               </div>
               <div class="flex justify-between">
-                <span>Sunday</span>
-                <span>Closed</span>
+                <span class="font-medium">Sunday</span>
+                <span class="font-semibold text-error">Closed</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl border-l-4 border-accent">
+          <div class="card-body p-6">
+            <h3 class="card-title text-xl mb-4 flex items-center">
+              <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center mr-3">
+                <i class="fas fa-phone text-white text-sm"></i>
+              </div>
+              Contact Information
+            </h3>
+            <div class="pl-11 space-y-2">
+              <div class="flex items-center">
+                <i class="fas fa-phone text-accent mr-2"></i>
+                <span>+91 33 2357 1234</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-envelope text-accent mr-2"></i>
+                <span>admissions@technobit.edu.in</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-globe text-accent mr-2"></i>
+                <span>www.technobit.edu.in</span>
               </div>
             </div>
           </div>
@@ -561,34 +819,51 @@
 </section>
 
 <!-- Footer -->
-<footer class="footer footer-center p-10 bg-primary text-primary-content">
+<footer class="footer p-10 bg-neutral text-neutral-content">
   <aside>
-    <div class="flex items-center justify-center mb-4">
-      <i class="fas fa-graduation-cap text-4xl mr-3"></i>
-      <div class="text-left">
-        <h3 class="text-2xl font-bold">Techno BIT Smart Campus</h3>
-        <p class="text-sm opacity-80">Techno Bengal Institute Of Technologia</p>
+    <div class="flex items-center mb-4">
+      <div
+        class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center mr-4">
+        <i class="fas fa-graduation-cap text-white text-xl"></i>
+      </div>
+      <div>
+        <p class="font-bold text-xl">Techno BIT Smart Campus</p>
+        <p class="text-sm opacity-70">Empowering minds since 1992</p>
       </div>
     </div>
-    <p class="opacity-80">Empowering minds, shaping futures through innovative technology education</p>
-    <p class="text-sm opacity-60">Copyright © 2025 - All rights reserved by Techno Bengal Institute Of Technologia</p>
   </aside>
+
   <nav>
+    <h6 class="footer-title text-lg mb-4">Quick Links</h6>
+    <a class="link link-hover">About Us</a>
+    <a class="link link-hover">Admissions</a>
+    <a class="link link-hover">Academic Programs</a>
+    <a class="link link-hover">Campus Life</a>
+  </nav>
+
+  <nav>
+    <h6 class="footer-title text-lg mb-4">Connect</h6>
     <div class="grid grid-flow-col gap-4">
-      <a class="btn btn-ghost btn-circle">
-        <i class="fab fa-facebook-f text-xl"></i>
+      <a class="btn btn-ghost btn-circle hover:bg-primary hover:text-white transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+          <path
+            d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616v.064c0 2.297 1.634 4.208 3.951 4.649-.69.188-1.432.23-2.184.087.621 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.588-7.52 2.588-.49 0-.974-.03-1.451-.086 2.685 1.727 5.867 2.733 9.285 2.733 11.124 0 17.222-9.232 17.222-17.223 0-.262-.006-.523-.018-.781a12.311 12.311 0 0 0 3.02-3.127Z">
+          </path>
+        </svg>
       </a>
-      <a class="btn btn-ghost btn-circle">
-        <i class="fab fa-twitter text-xl"></i>
+      <a class="btn btn-ghost btn-circle hover:bg-secondary hover:text-white transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+          <path
+            d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816Zm-10.615 12.701V8.115l6.06 3.043-6.06 4.727Z">
+          </path>
+        </svg>
       </a>
-      <a class="btn btn-ghost btn-circle">
-        <i class="fab fa-instagram text-xl"></i>
-      </a>
-      <a class="btn btn-ghost btn-circle">
-        <i class="fab fa-linkedin-in text-xl"></i>
-      </a>
-      <a class="btn btn-ghost btn-circle">
-        <i class="fab fa-youtube text-xl"></i>
+      <a class="btn btn-ghost btn-circle hover:bg-accent hover:text-white transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+          <path
+            d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v2.385z">
+          </path>
+        </svg>
       </a>
     </div>
   </nav>
@@ -596,13 +871,117 @@
 
 <!-- Back to Top Button -->
 <div class="fixed bottom-6 right-6 z-50">
-  <button class="btn btn-circle btn-primary shadow-lg" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+  <button
+    class="btn btn-circle btn-primary shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300"
+    onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to Top">
     <i class="fas fa-arrow-up"></i>
   </button>
 </div>
 
+<!-- Custom Styles -->
+<style>
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes float-delayed {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+
+  @keyframes float-slow {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float-delayed 8s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 10s ease-in-out infinite;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 1s ease-out;
+  }
+
+  .stat-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.5s ease;
+  }
+
+  .stat-card:hover::before {
+    transform: scale(1);
+  }
+
+  /* Smooth scrolling for all anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced carousel indicators */
+  .carousel-indicators a {
+    transition: all 0.3s ease;
+  }
+
+  .carousel-indicators a:hover {
+    transform: scale(1.2);
+  }
+</style>
+
 <script>
-  // Simple smooth scrolling for navigation links
+  // Enhanced smooth scrolling for navigation links
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       e.preventDefault();
@@ -616,17 +995,136 @@
     });
   });
 
-  // Theme toggle functionality (optional)
+  // Enhanced theme toggle functionality
   function toggleTheme() {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
+
+    // Update theme controller
+    const themeController = document.querySelector('.theme-controller');
+    if (themeController) {
+      themeController.checked = newTheme === 'dark';
+    }
   }
 
-  // Load saved theme
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+  // Load saved theme and initialize theme controller
+  window.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    // Set initial state of theme controller
+    const themeController = document.querySelector('.theme-controller');
+    if (themeController) {
+      themeController.checked = savedTheme === 'dark';
+    }
+  });
+
+  // Navbar scroll effect
+  window.addEventListener('scroll', function () {
+    const navbar = document.querySelector('.navbar');
+    if (window.scrollY > 50) {
+      navbar.classList.add('shadow-lg');
+    } else {
+      navbar.classList.remove('shadow-lg');
+    }
+  });
+
+  // Intersection Observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver(function (entries) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate-fade-in-up');
+      }
+    });
+  }, observerOptions);
+
+  // Observe all cards and sections
+  document.querySelectorAll('.card, section').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Auto-advance carousel (optional)
+  let currentSlide = 1;
+  const totalSlides = 4;
+
+  setInterval(() => {
+    currentSlide = currentSlide >= totalSlides ? 1 : currentSlide + 1;
+    const nextSlide = document.querySelector(`#slide${currentSlide}`);
+    if (nextSlide) {
+      nextSlide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }, 5000); // Auto-advance every 5 seconds
+
+  // Back to top button functionality
+  const backToTopBtn = document.querySelector('.fixed.bottom-6.right-6 .btn');
+  if (backToTopBtn) {
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 300) {
+        backToTopBtn.parentElement.style.opacity = '1';
+        backToTopBtn.parentElement.style.transform = 'translateY(0)';
+      } else {
+        backToTopBtn.parentElement.style.opacity = '0';
+        backToTopBtn.parentElement.style.transform = 'translateY(20px)';
+      }
+    });
+  }
+
+  // Contact form submission
+  const contactForm = document.querySelector('form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      // Add form submission logic here
+      alert('Thank you for your message! We will get back to you soon.');
+    });
+  }
+
+  // Parallax effect for floating elements
+  window.addEventListener('scroll', function () {
+    const scrolled = window.pageYOffset;
+    const parallax = document.querySelectorAll('.animate-float, .animate-float-delayed, .animate-float-slow');
+
+    parallax.forEach(element => {
+      const speed = 0.5;
+      element.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+  });
+
+  // Initialize carousel indicators
+  const carouselIndicators = document.querySelectorAll('.carousel-indicators a');
+  carouselIndicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', function () {
+      currentSlide = index + 1;
+    });
+  });
+
+  // Lazy loading for images
+  const images = document.querySelectorAll('img');
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.style.opacity = '1';
+        img.style.transform = 'scale(1)';
+        observer.unobserve(img);
+      }
+    });
+  });
+
+  images.forEach(img => {
+    img.style.opacity = '0';
+    img.style.transform = 'scale(0.8)';
+    img.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    imageObserver.observe(img);
+  });
 </script>
+
 {% endblock %}
