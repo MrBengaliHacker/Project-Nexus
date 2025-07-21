@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - KampusConnect</title>
+</head>
+<body>
+
+  <h1>Welcome to Your Dashboard</h1>
+
+  <p>Hello, {{ user.name }}!</p>
+
+  <nav>
+    <ul>
+      <li><a href="/profile">View Profile</a></li>
+      <li><a href="/results">Academic Results</a></li>
+      <li><a href="/complaints">Lodge a Complaint</a></li>
+      <li><a href="/notices">College Notices</a></li>
+      <li><a href="/clubs">Clubs & Events</a></li>
+      <li><a href="/logout">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section>
+    <h2>Quick Updates</h2>
+    <p>You have {{ unread_notifications }} new notifications.</p>
+    <p>Your last login was on {{ last_login }}.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 KampusConnect. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
