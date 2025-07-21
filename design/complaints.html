@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaints</title>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/complaints.html">Complaints</a></li>
+            <li><a href="/report.html">Report</a></li>
+        </ul>
+    </nav>
+
+    <!-- Complaints Form -->
+    <h1>Submit a Complaint</h1>
+
+    <form action="/submit-complaint" method="POST">
+        <label for="studentName">Name:</label><br>
+        <input type="text" id="studentName" name="studentName" required><br><br>
+
+        <label for="studentId">Student ID:</label><br>
+        <input type="text" id="studentId" name="studentId" required><br><br>
+
+        <label for="category">Category:</label><br>
+        <select id="category" name="category">
+            <option value="academic">Academic</option>
+            <option value="hostel">Hostel</option>
+            <option value="infrastructure">Infrastructure</option>
+            <option value="others">Others</option>
+        </select><br><br>
+
+        <label for="details">Complaint Details:</label><br>
+        <textarea id="details" name="details" rows="5" required></textarea><br><br>
+
+        <button type="submit">Submit Complaint</button>
+    </form>
+
+</body>
+</html>
