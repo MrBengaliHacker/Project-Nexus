@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback</title>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="/dashboard.html">Dashboard</a></li>
+            <li><a href="/feedback.html">Feedback</a></li>
+            <li><a href="/faq.html">FAQ</a></li>
+        </ul>
+    </nav>
+
+    <!-- Feedback Form -->
+    <h1>Submit Your Feedback</h1>
+
+    <form action="/submit-feedback" method="POST">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email (optional):</label><br>
+        <input type="email" id="email" name="email"><br><br>
+
+        <label for="message">Your Feedback:</label><br>
+        <textarea id="message" name="message" rows="5" required></textarea><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</body>
+</html>
