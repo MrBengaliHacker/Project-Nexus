@@ -1,208 +1,345 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KampusConnect</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KampusConnect</title>
 
-  <!-- Tailwind + DaisyUI -->
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.0/dist/full.css" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind + DaisyUI -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.4.0/dist/full.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- FontAwesome for close icon -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- FontAwesome for close icon -->
+    <script
+      src="https://kit.fontawesome.com/a076d05399.js"
+      crossorigin="anonymous"
+    ></script>
 
-  <style>
-    .hero-bg {
-      background-image: url('./image/college.png');
-      background-size: cover;
-      background-position: center;
-    }
-  </style>
-</head>
-<body class="bg-base-100">
-
-  <!-- Top Info Bar -->
-  <div class="bg-black text-gray-300 text-sm">
-    <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2">
-      <span class="font-semibold text-white">KampusConnect</span>
-      <div class="flex space-x-4">
-        <a href="#" class="hover:text-white">About Us</a>
-        <a href="#" class="hover:text-white">Support</a>
-        <a href="#" class="hover:text-white">Contact</a>
-        <a href="#" class="hover:text-white">FAQs</a>
-        <a href="#" class="hover:text-white"><i class="fas fa-search"></i> Search</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main Navbar -->
-  <div class="bg-white text-gray-800 sticky top-0 z-50 shadow-md">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-      <a class="text-xl font-bold text-purple-800">KampusConnect</a>
-      <ul class="hidden lg:flex space-x-6 font-semibold text-sm tracking-wide">
-        <li><a href="#" class="hover:text-gray-400">Dashboard</a></li>
-        <li><a href="#" class="hover:text-gray-400">Results</a></li>
-        <li><a href="#" class="hover:text-gray-400">Attendance</a></li>
-        <li><a href="#" class="hover:text-gray-400">Notes</a></li>
-        <li><a href="#" class="hover:text-gray-400">Announcements</a></li>
-        <li><a href="#" class="hover:text-gray-400">Events</a></li>
-        <li><a href="campus life/index.html" class="hover:text-gray-400">Campus life</a></li>
-        <li><a href="#" class="hover:text-gray-400">Feed</a></li>
-        <li><a href="#" class="hover:text-gray-400">Feedback</a></li>
-        <li><a href="#" class="hover:text-gray-400">Complaints</a></li>
-        <li><a href="#" class="hover:text-gray-400">Profile</a></li>
-      </ul>
-      <button onclick="toggleModal(true)" class="btn btn-sm btn-primary ml-4">Login/Register</button>
-    </div>
-  </div>
-
-  <!-- Hero Section -->
-  <section class="hero min-h-screen hero-bg flex items-center justify-center text-white pt-20">
-    <div class="text-center bg-black bg-opacity-50 p-8 rounded-lg max-w-3xl">
-      <h1 class="text-5xl font-bold mb-4">Welcome to KampusConnect 🎓</h1>
-      <p class="mb-6 text-lg">
-        One platform. All your campus needs. From results to events — stay connected.
-      </p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-300 mt-16 pt-10 pb-6 px-6 lg:px-20">
-  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-    
-    <!-- Column 1 -->
-    <div>
-      <h2 class="text-white font-semibold mb-4">Explore</h2>
-      <ul class="space-y-2 text-sm">
-        <li><a href="/dashboard.html" class="hover:text-white">Dashboard</a></li>
-        <li><a href="/events/events.html" class="hover:text-white">Events</a></li>
-        <li><a href="/announcements.html" class="hover:text-white">Announcements</a></li>
-        <li><a href="/feed/feed.html" class="hover:text-white">Feed</a></li>
-      </ul>
-    </div>
-
-    <!-- Column 2 -->
-    <div>
-      <h2 class="text-white font-semibold mb-4">Resources</h2>
-      <ul class="space-y-2 text-sm">
-        <li><a href="/academic/notes.html" class="hover:text-white">Notes</a></li>
-        <li><a href="/academic/results.html" class="hover:text-white">Results</a></li>
-        <li><a href="/academic/attendance.html" class="hover:text-white">Attendance</a></li>
-        <li><a href="/faq.html" class="hover:text-white">FAQs</a></li>
-      </ul>
-    </div>
-
-    <!-- Column 3 -->
-    <div>
-      <h2 class="text-white font-semibold mb-4">Quick Links</h2>
-      <ul class="space-y-2 text-sm">
-        <li><a href="/profile.html" class="hover:text-white">Profile</a></li>
-        <li><a href="/chatbot.html" class="hover:text-white">Chatbot</a></li>
-        <li><a href="/complaints.html" class="hover:text-white">Complaints</a></li>
-        <li><a href="/feedback.html" class="hover:text-white">Feedback</a></li>
-      </ul>
-    </div>
-
-    <!-- Column 4 -->
-    <div>
-      <h2 class="text-white font-semibold mb-4">Connect</h2>
-      <button class="btn btn-error btn-sm w-full mb-4">Admission Now!</button>
-      <div class="flex space-x-4">
-        <a href="#" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
-        <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
-        <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="hover:text-white"><i class="fab fa-linkedin"></i></a>
-        <a href="#" class="hover:text-white"><i class="fab fa-youtube"></i></a>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Bottom line -->
-  <div class="mt-10 text-center text-xs text-gray-500 border-t border-gray-700 pt-4">
-    Built with ❤️ for students. KampusConnect © 2025. All rights reserved.
-  </div>
-</footer>
-
-  <!-- Login/Register Modal -->
-  <div id="authModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-60 flex items-center justify-center">
-    <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
-      <!-- Close Button -->
-      <button onclick="toggleModal(false)" class="absolute top-2 right-2 text-xl text-gray-500 hover:text-red-500">
-        <i class="fas fa-times"></i>
-      </button>
-
-      <!-- Tabs -->
-      <div class="flex justify-center mb-6">
-        <button id="loginTab" onclick="showTab('login')" class="tab-btn btn btn-sm rounded-none border-none bg-purple-600 text-white mr-2">Login</button>
-        <button id="signupTab" onclick="showTab('signup')" class="tab-btn btn btn-sm rounded-none border-none text-black bg-gray-200">Sign Up</button>
-      </div>
-
-      <!-- Login Form -->
-      <div id="loginForm" class="form-section">
-        <h2 class="text-lg font-semibold mb-4 text-center">Login to KampusConnect</h2>
-        <form>
-          <input type="email" placeholder="Email" class="input input-bordered w-full mb-3" required />
-          <input type="password" placeholder="Password" class="input input-bordered w-full mb-4" required />
-          <button type="submit" class="btn btn-block bg-purple-600 hover:bg-purple-700 text-white">Login</button>
-        </form>
-        <p class="mt-3 text-center text-sm">
-          Don’t have an account?
-          <a href="#" class="text-blue-600 hover:underline" onclick="event.preventDefault(); showTab('signup')">Sign up here</a>
-        </p>
-      </div>
-
-      <!-- Signup Form -->
-      <div id="signupForm" class="form-section hidden">
-        <h2 class="text-lg font-semibold mb-4 text-center">Create Your Account</h2>
-        <form>
-          <input type="text" placeholder="Full Name" class="input input-bordered w-full mb-3" required />
-          <input type="email" placeholder="Email" class="input input-bordered w-full mb-3" required />
-          <input type="password" placeholder="Password" class="input input-bordered w-full mb-3" required />
-          <input type="password" placeholder="Confirm Password" class="input input-bordered w-full mb-4" required />
-          <button type="submit" class="btn btn-block bg-purple-600 hover:bg-purple-700 text-white">Sign Up</button>
-        </form>
-        <p class="mt-3 text-center text-sm">
-          Already have an account?
-          <a href="#" class="text-blue-600 hover:underline" onclick="event.preventDefault(); showTab('login')">Login here</a>
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script>
-    function toggleModal(show) {
-      document.getElementById('authModal').classList.toggle('hidden', !show);
-    }
-
-    function showTab(tab) {
-      const loginForm = document.getElementById('loginForm');
-      const signupForm = document.getElementById('signupForm');
-      const loginTab = document.getElementById('loginTab');
-      const signupTab = document.getElementById('signupTab');
-
-      if (tab === 'login') {
-        loginForm.classList.remove('hidden');
-        signupForm.classList.add('hidden');
-        loginTab.classList.add('bg-purple-600', 'text-white');
-        signupTab.classList.remove('bg-purple-600', 'text-white');
-        signupTab.classList.add('bg-gray-200', 'text-black');
-      } else {
-        signupForm.classList.remove('hidden');
-        loginForm.classList.add('hidden');
-        signupTab.classList.add('bg-purple-600', 'text-white');
-        loginTab.classList.remove('bg-purple-600', 'text-white');
-        loginTab.classList.add('bg-gray-200', 'text-black');
+    <style>
+      .hero-bg {
+        background-image: url("./image/college.png");
+        background-size: cover;
+        background-position: center;
       }
-    }
+    </style>
+  </head>
+  <body class="bg-base-100">
+    <!-- Top Info Bar -->
+    <div class="bg-black text-gray-300 text-sm">
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center px-4 py-2"
+      >
+        <span class="font-semibold text-white">KampusConnect</span>
+        <div class="flex space-x-4">
+          <a href="#" class="hover:text-white">About Us</a>
+          <a href="#" class="hover:text-white">Support</a>
+          <a href="#" class="hover:text-white">Contact</a>
+          <a href="#" class="hover:text-white">FAQs</a>
+          <a href="#" class="hover:text-white"
+            ><i class="fas fa-search"></i> Search</a
+          >
+        </div>
+      </div>
+    </div>
 
-    // Default open login tab
-    document.addEventListener('DOMContentLoaded', () => {
-      showTab('login');
-    });
-  </script>
+    <!-- Main Navbar -->
+    <div class="bg-white text-gray-800 sticky top-0 z-50 shadow-md">
+      <div
+        class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3"
+      >
+        <a class="text-xl font-bold text-purple-800">KampusConnect</a>
+        <ul
+          class="hidden lg:flex space-x-6 font-semibold text-sm tracking-wide"
+        >
+          <li><a href="#" class="hover:text-gray-400">Dashboard</a></li>
+          <li><a href="#" class="hover:text-gray-400">Results</a></li>
+          <li><a href="#" class="hover:text-gray-400">Attendance</a></li>
+          <li><a href="#" class="hover:text-gray-400">Notes</a></li>
+          <li><a href="#" class="hover:text-gray-400">Announcements</a></li>
+          <li><a href="#" class="hover:text-gray-400">Events</a></li>
+          <li>
+            <a href="campus life/index.html" class="hover:text-gray-400"
+              >Campus life</a
+            >
+          </li>
+          <li><a href="#" class="hover:text-gray-400">Feed</a></li>
+          <li><a href="#" class="hover:text-gray-400">Feedback</a></li>
+          <li><a href="#" class="hover:text-gray-400">Complaints</a></li>
+          <li><a href="#" class="hover:text-gray-400">Profile</a></li>
+        </ul>
+        <button onclick="toggleModal(true)" class="btn btn-sm btn-primary ml-4">
+          Login/Register
+        </button>
+      </div>
+    </div>
 
-</body>
+    <!-- Hero Section -->
+    <section
+      class="hero min-h-screen hero-bg flex items-center justify-center text-white pt-20"
+    >
+      <div class="text-center bg-black bg-opacity-50 p-8 rounded-lg max-w-3xl">
+        <h1 class="text-5xl font-bold mb-4">Welcome to KampusConnect 🎓</h1>
+        <p class="mb-6 text-lg">
+          One platform. All your campus needs. From results to events — stay
+          connected.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 mt-16 pt-10 pb-6 px-6 lg:px-20">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Column 1 -->
+        <div>
+          <h2 class="text-white font-semibold mb-4">Explore</h2>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="/dashboard.html" class="hover:text-white">Dashboard</a>
+            </li>
+            <li>
+              <a href="/events/events.html" class="hover:text-white">Events</a>
+            </li>
+            <li>
+              <a href="/announcements.html" class="hover:text-white"
+                >Announcements</a
+              >
+            </li>
+            <li><a href="/feed/feed.html" class="hover:text-white">Feed</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 2 -->
+        <div>
+          <h2 class="text-white font-semibold mb-4">Resources</h2>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="/academic/notes.html" class="hover:text-white">Notes</a>
+            </li>
+            <li>
+              <a href="/academic/results.html" class="hover:text-white"
+                >Results</a
+              >
+            </li>
+            <li>
+              <a href="/academic/attendance.html" class="hover:text-white"
+                >Attendance</a
+              >
+            </li>
+            <li><a href="/faq.html" class="hover:text-white">FAQs</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3 -->
+        <div>
+          <h2 class="text-white font-semibold mb-4">Quick Links</h2>
+          <ul class="space-y-2 text-sm">
+            <li>
+              <a href="/profile.html" class="hover:text-white">Profile</a>
+            </li>
+            <li>
+              <a href="/chatbot.html" class="hover:text-white">Chatbot</a>
+            </li>
+            <li>
+              <a href="/complaints.html" class="hover:text-white">Complaints</a>
+            </li>
+            <li>
+              <a href="/feedback.html" class="hover:text-white">Feedback</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Column 4 -->
+        <div>
+          <h2 class="text-white font-semibold mb-4">Connect</h2>
+          <button class="btn btn-error btn-sm w-full mb-4">
+            Admission Now!
+          </button>
+          <div class="flex space-x-4">
+            <a href="#" class="hover:text-white"
+              ><i class="fab fa-facebook-f"></i
+            ></a>
+            <a href="#" class="hover:text-white"
+              ><i class="fab fa-twitter"></i
+            ></a>
+            <a href="#" class="hover:text-white"
+              ><i class="fab fa-instagram"></i
+            ></a>
+            <a href="#" class="hover:text-white"
+              ><i class="fab fa-linkedin"></i
+            ></a>
+            <a href="#" class="hover:text-white"
+              ><i class="fab fa-youtube"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom line -->
+      <div
+        class="mt-10 text-center text-xs text-gray-500 border-t border-gray-700 pt-4"
+      >
+        Built with ❤️ for students. KampusConnect © 2025. All rights reserved.
+      </div>
+    </footer>
+
+    <!-- Login/Register Modal -->
+    <div
+      id="authModal"
+      class="fixed inset-0 z-50 hidden bg-black bg-opacity-60 flex items-center justify-center"
+    >
+      <!-- Modal Content -->
+      <div class="bg-white rounded-lg w-full max-w-md p-6 relative shadow-lg">
+        <!-- Close Button inside modal box -->
+        <button
+          onclick="toggleModal(false)"
+          class="absolute top-3 right-3 text-2xl text-gray-400 hover:text-red-500"
+        >
+          &times;
+        </button>
+
+        <!-- Tabs -->
+        <div class="flex justify-center mb-6 mt-4">
+          <button
+            id="loginTab"
+            onclick="showTab('login')"
+            class="tab-btn btn btn-sm rounded-none border-none bg-purple-600 text-white mr-2"
+          >
+            Login
+          </button>
+          <button
+            id="signupTab"
+            onclick="showTab('signup')"
+            class="tab-btn btn btn-sm rounded-none border-none text-black bg-gray-200"
+          >
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="form-section">
+          <h2 class="text-lg font-semibold mb-4 text-center">
+            Login to KampusConnect
+          </h2>
+          <form>
+            <input
+              type="email"
+              placeholder="Email"
+              class="input input-bordered w-full mb-3"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              class="input input-bordered w-full mb-4"
+              required
+            />
+            <button
+              type="submit"
+              class="btn btn-block bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              Login
+            </button>
+          </form>
+          <p class="mt-3 text-center text-sm">
+            Don’t have an account?
+            <a
+              href="#"
+              class="text-blue-600 hover:underline"
+              onclick="event.preventDefault(); showTab('signup')"
+              >Sign up here</a
+            >
+          </p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signupForm" class="form-section hidden">
+          <h2 class="text-lg font-semibold mb-4 text-center">
+            Create Your Account
+          </h2>
+          <form>
+            <input
+              type="text"
+              placeholder="Full Name"
+              class="input input-bordered w-full mb-3"
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              class="input input-bordered w-full mb-3"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              class="input input-bordered w-full mb-3"
+              required
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              class="input input-bordered w-full mb-4"
+              required
+            />
+            <button
+              type="submit"
+              class="btn btn-block bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              Sign Up
+            </button>
+          </form>
+          <p class="mt-3 text-center text-sm">
+            Already have an account?
+            <a
+              href="#"
+              class="text-blue-600 hover:underline"
+              onclick="event.preventDefault(); showTab('login')"
+              >Login here</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal JS -->
+    <script>
+      function toggleModal(show) {
+        const modal = document.getElementById("authModal");
+        if (show) {
+          modal.classList.remove("hidden");
+        } else {
+          modal.classList.add("hidden");
+        }
+      }
+
+      function showTab(tab) {
+        const loginForm = document.getElementById("loginForm");
+        const signupForm = document.getElementById("signupForm");
+        const loginTab = document.getElementById("loginTab");
+        const signupTab = document.getElementById("signupTab");
+
+        if (tab === "login") {
+          loginForm.classList.remove("hidden");
+          signupForm.classList.add("hidden");
+          loginTab.classList.add("bg-purple-600", "text-white");
+          signupTab.classList.remove("bg-purple-600", "text-white");
+          signupTab.classList.add("bg-gray-200", "text-black");
+        } else {
+          signupForm.classList.remove("hidden");
+          loginForm.classList.add("hidden");
+          signupTab.classList.add("bg-purple-600", "text-white");
+          loginTab.classList.remove("bg-purple-600", "text-white");
+          loginTab.classList.add("bg-gray-200", "text-black");
+        }
+      }
+
+      // Open login tab by default
+      document.addEventListener("DOMContentLoaded", () => {
+        showTab("login");
+      });
+    </script>
+  </body>
 </html>
