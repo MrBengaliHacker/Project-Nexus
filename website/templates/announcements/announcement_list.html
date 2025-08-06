@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Announcements{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Announcements</h1>
+  <form method="get" class="mb-4 flex gap-2">
+    <input type="text" name="category" placeholder="Category" class="border rounded px-2 py-1" value="{{ request.args.get('category', '') }}">
+    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filter</button>
+    {% if current_user.role in ['faculty', 'admin', 'cr'] %}
+      <a href="{{ url_for('announcements.announcement_create') }}" class="bg-green-500 text-white px-3 py-1 rounded ml-2">Post Announcement</a>
+    {% endif %}
+  </form>
+  {% for announcement in announcements %}
+    <div class="border rounded p-4 mb-4 {% if announcement.is_pinned %}bg-yellow-100{% endif %}">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-semibold">{{ announcement.title }}</h2>
+        {% if announcement.is_pinned %}<span class="text-yellow-700 font-bold">Pinned</span>{% endif %}
+      </div>
+      <p class="mt-2">{{ announcement.content }}</p>
+      {% if announcement.file_url %}
+        <a href="{{ announcement.file_url }}" class="text-blue-600 underline" target="_blank">Attachment</a>
+      {% endif %}
+      <div class="text-sm text-gray-600 mt-2">
+        Posted by: {{ announcement.poster.name }} ({{ announcement.poster.role }}) on {{ announcement.posted_at.strftime('%Y-%m-%d %H:%M') }}
+        {% if current_user.id == announcement.posted_by and current_user.role in ['faculty', 'admin', 'cr'] %}
+          <a href="{{ url_for('announcements.announcement_edit', announcement_id=announcement.id) }}" class="ml-2 text-blue-500">Edit</a>
+          <form method="POST" action="{{ url_for('announcements.announcement_delete', announcement_id=announcement.id) }}" style="display:inline;">
+            <button type="submit" class="ml-2 text-red-500" onclick="return confirm('Delete this announcement?')">Delete</button>
+          </form>
+        {% endif %}
+      </div>
+      {% if announcement.category %}
+        <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded mt-2">{{ announcement.category }}</span>
+      {% endif %}
+    </div>
+  {% else %}
+    <p>No announcements found.</p>
+  {% endfor %}
+</div>
+{% endblock %}
