@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Notes Repository{% endblock %}
+{% block content %}
+<h1>Notes Repository</h1>
+
+<form method="get" action="{{ url_for('resources.notes_list') }}">
+  <label for="semester">Semester:</label>
+  <input type="number" name="semester" id="semester" value="{{ request.args.get('semester', '') }}">
+  <label for="subject">Subject:</label>
+  <input type="text" name="subject" id="subject" value="{{ request.args.get('subject', '') }}">
+  <button type="submit">Filter</button>
+</form>
+
+{% if current_user.role in ['faculty', 'admin'] %}
+  <a href="{{ url_for('resources.notes_upload') }}" class="btn btn-primary">Upload Note</a>
+{% endif %}
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Semester</th>
+      <th>Subject</th>
+      <th>Uploaded At</th>
+      <th>Download</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for note in notes %}
+    <tr>
+      <td>{{ note.title }}</td>
+      <td>{{ note.description }}</td>
+      <td>{{ note.semester }}</td>
+      <td>{{ note.subject }}</td>
+      <td>{{ note.uploaded_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      <td><a href="{{ url_for('resources.note_download', note_id=note.id) }}">Download</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
