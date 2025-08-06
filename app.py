@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from werkzeug.security import generate_password_hash
+from flask_login import LoginManager
 
 
 def create_app():
@@ -12,14 +13,24 @@ def create_app():
     from website.blueprints.teacher import teacher_bp
     from website.blueprints.student import student_bp
     from website.blueprints.faculty import faculty_bp
+    from website.blueprints.resources import resources_bp
+    from website.blueprints.announcements import announcements_bp
 
-    # Configuration
     app.config["SECRET_KEY"] = "your-secret-key-change-this"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///website.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # Initialize Databse
     db.init_app(app)
+
+    # Setup Flask-Login
+    login_manager = LoginManager()
+    login_manager.login_view = "auth.login"
+    login_manager.login_message_category = "info"
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
     # Register Blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -27,6 +38,8 @@ def create_app():
     app.register_blueprint(teacher_bp, url_prefix="/teacher")
     app.register_blueprint(faculty_bp, url_prefix="/faculty")
     app.register_blueprint(student_bp, url_prefix="/student")
+    app.register_blueprint(resources_bp)
+    app.register_blueprint(announcements_bp)
 
     # Create Tables
     with app.app_context():
@@ -36,9 +49,10 @@ def create_app():
         if not admin_user:
             hashed_password = generate_password_hash("admin123")
             admin_user = User(
+                name="Admin",
                 username="admin",
                 email="admin@teamnexus.com",
-                password=hashed_password,
+                password_hash=hashed_password,
                 role="admin",
             )
             db.session.add(admin_user)
