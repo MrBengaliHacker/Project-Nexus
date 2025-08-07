@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto p-4">
+  <h2 class="text-2xl font-bold mb-4">Create Event</h2>
+  <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    <div>
+      <label class="block font-semibold">Title</label>
+      <input type="text" name="title" class="w-full border rounded p-2" required>
+    </div>
+    <div>
+      <label class="block font-semibold">Description</label>
+      <textarea name="description" class="w-full border rounded p-2" rows="4"></textarea>
+    </div>
+    <div class="flex gap-4">
+      <div class="flex-1">
+        <label class="block font-semibold">Start Date & Time</label>
+        <input type="datetime-local" name="start_time" class="w-full border rounded p-2" required>
+      </div>
+      <div class="flex-1">
+        <label class="block font-semibold">End Date & Time</label>
+        <input type="datetime-local" name="end_time" class="w-full border rounded p-2" required>
+      </div>
+    </div>
+    <div>
+      <label class="block font-semibold">Location</label>
+      <input type="text" name="location" class="w-full border rounded p-2">
+    </div>
+    <div>
+      <label class="block font-semibold">Poster/File (optional)</label>
+      <input type="file" name="file" class="w-full">
+    </div>
+    <div>
+      <label class="block font-semibold">Registration Link (optional)</label>
+      <input type="url" name="registration_link" class="w-full border rounded p-2">
+    </div>
+    <div>
+      <label class="block font-semibold">Category/Tag (optional)</label>
+      <input type="text" name="category" class="w-full border rounded p-2" placeholder="e.g. academic, cultural">
+    </div>
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Create Event</button>
+  </form>
+</div>
+{% endblock %}
