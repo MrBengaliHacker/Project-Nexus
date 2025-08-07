@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>New Post</h2>
+<form method="post" enctype="multipart/form-data">
+    <label>Title:</label>
+    <input type="text" name="title" required><br>
+    <label>Content:</label>
+    <textarea name="content" required></textarea><br>
+    <label>Tags:</label>
+    <select name="tags" multiple>
+        {% for tag in tags %}
+            <option value="{{ tag.id }}">{{ tag.name }}</option>
+        {% endfor %}
+    </select><br>
+    <label>Attachment (optional):</label>
+    <input type="file" name="file"><br>
+    <button type="submit">Post</button>
+</form>
+<a href="{{ url_for('feed.feed') }}">Back to Feed</a>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ post.title }}</h2>
+<p>{{ post.content }}</p>
+<p>By {{ post.author.name }} | {{ post.created_at.strftime('%d %b %Y %H:%M') }}</p>
+<p>Tags: {% for tag in post.tags %}<span class="badge">{{ tag.name }}</span> {% endfor %}</p>
+{% if post.file_url %}
+    <p>Attachment: <a href="/static/uploads/{{ post.file_url }}">Download</a></p>
+{% endif %}
+<hr>
+<h3>Comments</h3>
+<ul>
+    {% for comment in comments %}
+    <li>
+        <b>{{ comment.author.name }}</b> ({{ comment.created_at.strftime('%d %b %Y %H:%M') }}):
+        {{ comment.content }}
+        {% if current_user.role == 'admin' or comment.author_id == current_user.id %}
+        <form method="post" action="{{ url_for('feed.delete_comment', comment_id=comment.id) }}" style="display:inline;">
+            <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+        <form method="post" action="{{ url_for('feed.report') }}" style="display:inline;">
+            <input type="hidden" name="comment_id" value="{{ comment.id }}">
+            <input type="text" name="reason" placeholder="Report reason">
+            <button type="submit">Report</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+<form method="post">
+    <textarea name="content" required></textarea><br>
+    <button type="submit">Add Comment</button>
+</form>
+<a href="{{ url_for('feed.feed') }}">Back to Feed</a>
+{% include 'feed/_realtime.html' %}
+{% endblock %}
