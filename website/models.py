@@ -141,30 +141,66 @@ class Feedback(db.Model):
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+
+# Association table for post <-> tag
+post_tags = db.Table(
+    'post_tags',
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+)
+
 class Post(db.Model):
     __tablename__ = "posts"
 
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-
+    title = db.Column(db.String(255), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    tags = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    file_url = db.Column(db.String(255), nullable=True)
+    is_deleted = db.Column(db.Boolean, default=False)
+    is_reported = db.Column(db.Boolean, default=False)
 
-    likes = db.Column(db.Integer, default=0)
-    comments = db.relationship("Comment", backref="post", lazy=True)
+    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
+    comments = db.relationship("Comment", backref="post", lazy=True, cascade="all, delete-orphan")
+    likes = db.relationship("Like", backref="post", lazy=True, cascade="all, delete-orphan")
+    reports = db.relationship("Report", backref="post", lazy=True, cascade="all, delete-orphan")
+
 
 
 class Comment(db.Model):
     __tablename__ = "comments"
 
     id = db.Column(db.Integer, primary_key=True)
-
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     content = db.Column(db.Text, nullable=False)
-
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    is_deleted = db.Column(db.Boolean, default=False)
+    is_reported = db.Column(db.Boolean, default=False)
+    reports = db.relationship("Report", backref="comment", lazy=True, cascade="all, delete-orphan")
+
+# Like/Upvote system: one like per user per post
+class Like(db.Model):
+    __tablename__ = "likes"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    __table_args__ = (db.UniqueConstraint('user_id', 'post_id', name='_user_post_uc'),)
+
+# Report system for moderation
+class Report(db.Model):
+    __tablename__ = "reports"
+    id = db.Column(db.Integer, primary_key=True)
+    reporter_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable=True)
+    comment_id = db.Column(db.Integer, db.ForeignKey("comments.id"), nullable=True)
+    reason = db.Column(db.String(255), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_resolved = db.Column(db.Boolean, default=False)
 
 
 class Attendance(db.Model):
