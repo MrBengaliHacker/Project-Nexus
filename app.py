@@ -1,6 +1,8 @@
+
 from flask import Flask, render_template
 from werkzeug.security import generate_password_hash
 from flask_login import LoginManager
+from website.socketio_events import socketio, register_socketio_events
 
 
 def create_app():
@@ -16,6 +18,7 @@ def create_app():
     from website.blueprints.resources import resources_bp
     from website.blueprints.announcements import announcements_bp
     from website.blueprints.events import events_bp
+    from website.blueprints.feed import feed_bp
 
     app.config["SECRET_KEY"] = "your-secret-key-change-this"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///website.db"
@@ -42,6 +45,7 @@ def create_app():
     app.register_blueprint(resources_bp)
     app.register_blueprint(announcements_bp)
     app.register_blueprint(events_bp)
+    app.register_blueprint(feed_bp)
 
     # Create Tables
     with app.app_context():
@@ -65,9 +69,10 @@ def create_app():
     def index():
         return render_template("index.html")
 
+    register_socketio_events(app)
     return app
 
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=True)
+    socketio.run(app, debug=True)
