@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Campus Feed</h1>
+<a href="{{ url_for('feed.new_post') }}" class="btn btn-primary">New Post</a>
+
+<form method="get" action="{{ url_for('feed.feed') }}">
+    <input type="text" name="search" placeholder="Search posts..." value="{{ request.args.get('search', '') }}">
+    <select name="tag">
+        <option value="">All Tags</option>
+        {% for tag in tags %}
+            <option value="{{ tag.name }}" {% if request.args.get('tag') == tag.name %}selected{% endif %}>{{ tag.name }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+{% for post in posts %}
+<div class="post">
+    <h3><a href="{{ url_for('feed.post_detail', post_id=post.id) }}">{{ post.title }}</a></h3>
+    <p>{{ post.content[:200] }}{% if post.content|length > 200 %}...{% endif %}</p>
+    <div>
+        <small>By {{ post.author.name }} | {{ post.created_at.strftime('%d %b %Y %H:%M') }}</small>
+        <span>Tags: {% for tag in post.tags %}<span class="badge">{{ tag.name }}</span> {% endfor %}</span>
+        <span>Likes: <span id="like-count-{{ post.id }}">{{ post.likes|length }}</span></span>
+        <form method="post" action="{{ url_for('feed.like_post', post_id=post.id) }}" class="like-form" data-post-id="{{ post.id }}">
+            <button type="submit">Like</button>
+        </form>
+        <form method="post" action="{{ url_for('feed.report') }}">
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <input type="text" name="reason" placeholder="Report reason">
+            <button type="submit">Report</button>
+        </form>
+        {% if current_user.role == 'admin' or post.author_id == current_user.id %}
+        <form method="post" action="{{ url_for('feed.delete_post', post_id=post.id) }}">
+            <button type="submit">Delete</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+<hr>
+{% endfor %}
+
+<script>
+// AJAX like
+const forms = document.querySelectorAll('.like-form');
+forms.forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        fetch(form.action, {method: 'POST'})
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('like-count-' + form.dataset.postId).innerText = data.count;
+            });
+    });
+});
+</script>
+{% include 'feed/_realtime.html' %}
+{% endblock %}
