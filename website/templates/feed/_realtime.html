@@ -1,0 +1,34 @@
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+const socket = io();
+
+// Listen for new posts
+socket.on('broadcast_new_post', function(data) {
+    // Optionally, reload or prepend the new post to the feed
+    location.reload();
+});
+
+// Listen for new comments
+socket.on('broadcast_new_comment', function(data) {
+    // Optionally, reload or update the post detail page
+    if (window.location.href.includes('/feed/post/')) {
+        location.reload();
+    }
+});
+
+// Listen for like updates
+socket.on('broadcast_like_post', function(data) {
+    const likeCount = document.getElementById('like-count-' + data.post_id);
+    if (likeCount) {
+        likeCount.innerText = data.count;
+    }
+});
+
+// Listen for reports (optional: admin only)
+socket.on('broadcast_report_content', function(data) {
+    // Optionally, notify admin or reload reports page
+    if (window.location.href.includes('/feed/reports')) {
+        location.reload();
+    }
+});
+</script>
