@@ -1,7 +1,9 @@
-from website.models import db, User
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, logout_user, login_required
+from sqlalchemy import or_
+
+from website.models import db, User
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -9,12 +11,20 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
+        username_or_email = request.form["username"]
         password = request.form["password"]
-        user = User.query.filter_by(username=username).first()
+
+        user = User.query.filter(
+            or_(
+                User.username == username_or_email,
+                User.email == username_or_email
+            )
+        ).first()
+
         if user and check_password_hash(user.password_hash, password):
             login_user(user)
             flash("Login Successful!", "success")
+
             if user.role == "admin":
                 return redirect(url_for("admin.admin_home"))
             elif user.role == "teacher":
@@ -35,14 +45,15 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
         role = request.form["role"]
-        name = request.form.get(
-            "name", username
-        )  # Optionally add a name field to the form
+        name = request.form.get("name", username)
         existing_user = User.query.filter_by(username=username).first()
+
         if existing_user:
             flash("Username Already Exists", "error")
             return render_template("auth/register.html")
+
         existing_email = User.query.filter_by(email=email).first()
+
         if existing_email:
             flash("Email Already Exists", "error")
             return render_template("auth/register.html")
