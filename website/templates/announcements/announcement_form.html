@@ -17,6 +17,10 @@
       <input type="text" name="category" id="category" class="border rounded px-2 py-1 w-full" value="{{ announcement.category if announcement else '' }}">
     </div>
     <div>
+      <label for="tags" class="block font-semibold">Tags (comma separated):</label>
+      <input type="text" name="tags" id="tags" class="border rounded px-2 py-1 w-full" value="{{ tags_str if tags_str is defined else '' }}">
+    </div>
+    <div>
       <label for="is_pinned" class="inline-flex items-center">
         <input type="checkbox" name="is_pinned" id="is_pinned" {% if announcement and announcement.is_pinned %}checked{% endif %}>
         <span class="ml-2">Pin this announcement</span>

@@ -32,6 +32,13 @@
       {% if announcement.category %}
         <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded mt-2">{{ announcement.category }}</span>
       {% endif %}
+      {% if announcement.tags %}
+        <div class="mt-2">
+          {% for tag in announcement.tags %}
+            <span class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded mr-1">#{{ tag.name }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
     </div>
   {% else %}
     <p>No announcements found.</p>
