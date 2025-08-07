@@ -72,6 +72,17 @@ class Note(db.Model):
     uploaded_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
+announcement_tags = db.Table(
+    'announcement_tags',
+    db.Column('announcement_id', db.Integer, db.ForeignKey('announcements.id'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+)
+
+class Tag(db.Model):
+    __tablename__ = "tags"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+
 class Announcement(db.Model):
     __tablename__ = "announcements"
 
@@ -83,6 +94,8 @@ class Announcement(db.Model):
     category = db.Column(db.String(100), nullable=True)
     file_url = db.Column(db.String(255), nullable=True)
     is_pinned = db.Column(db.Boolean, default=False)
+
+    tags = db.relationship('Tag', secondary=announcement_tags, backref=db.backref('announcements', lazy='dynamic'))
 
 
 class Event(db.Model):
@@ -100,8 +113,20 @@ class Event(db.Model):
 
     registration_link = db.Column(db.String(255), nullable=True)
 
+    file_url = db.Column(db.String(255), nullable=True)
+    category = db.Column(db.String(100), nullable=True)
+
     posted_by = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     posted_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    rsvps = db.relationship('User', secondary='event_rsvps', backref='events_rsvped', lazy='dynamic')
+
+# RSVP join table
+event_rsvps = db.Table(
+    'event_rsvps',
+    db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+)
 
 
 class Feedback(db.Model):
