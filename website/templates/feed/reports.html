@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Reported Content</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Content</th>
+        <th>Reason</th>
+        <th>Reporter</th>
+        <th>Date</th>
+        <th>Resolved</th>
+    </tr>
+    {% for report in reports %}
+    <tr>
+        <td>{{ report.id }}</td>
+        <td>{% if report.post_id %}Post{% elif report.comment_id %}Comment{% endif %}</td>
+        <td>
+            {% if report.post_id %}
+                <a href="{{ url_for('feed.post_detail', post_id=report.post_id) }}">View Post</a>
+            {% elif report.comment_id %}
+                Comment ID: {{ report.comment_id }}
+            {% endif %}
+        </td>
+        <td>{{ report.reason }}</td>
+        <td>{{ report.reporter_id }}</td>
+        <td>{{ report.created_at.strftime('%d %b %Y %H:%M') }}</td>
+        <td>{{ 'Yes' if report.is_resolved else 'No' }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{ url_for('feed.feed') }}">Back to Feed</a>
+{% include 'feed/_realtime.html' %}
+{% endblock %}
