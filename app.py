@@ -15,6 +15,7 @@ def create_app():
     from website.blueprints.faculty import faculty_bp
     from website.blueprints.resources import resources_bp
     from website.blueprints.announcements import announcements_bp
+    from website.blueprints.events import events_bp
 
     app.config["SECRET_KEY"] = "your-secret-key-change-this"
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///website.db"
@@ -40,6 +41,7 @@ def create_app():
     app.register_blueprint(student_bp, url_prefix="/student")
     app.register_blueprint(resources_bp)
     app.register_blueprint(announcements_bp)
+    app.register_blueprint(events_bp)
 
     # Create Tables
     with app.app_context():
