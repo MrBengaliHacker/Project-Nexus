@@ -1,55 +1,409 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Events - KampusConnect{% endblock %}
+
 {% block content %}
-<div class="max-w-5xl mx-auto p-4">
-  <h2 class="text-2xl font-bold mb-4">Events</h2>
-  <div class="flex justify-between items-center mb-4">
-    <form method="get" class="flex gap-2">
-      <input type="text" name="q" placeholder="Search events..." class="border rounded p-2" value="{{ request.args.get('q', '') }}">
-      <select name="type" class="border rounded p-2">
-        <option value="upcoming">Upcoming</option>
-        <option value="past">Past</option>
-      </select>
-      <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded">Filter</button>
-    </form>
-    {% if current_user.role in ['faculty', 'admin', 'cr'] %}
-      <a href="{{ url_for('events.event_create') }}" class="bg-green-600 text-white px-4 py-2 rounded">+ Create Event</a>
-    {% endif %}
-  </div>
-  <div>
-    <h3 class="text-xl font-semibold mt-6 mb-2">Upcoming Events</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {% for event in upcoming_events %}
-        <div class="border rounded-lg p-4 bg-white shadow">
-          {% if event.file_url %}
-            <img src="{{ event.file_url }}" alt="Poster" class="h-32 w-full object-cover mb-2 rounded">
-          {% endif %}
-          <h4 class="font-bold text-lg mb-1">{{ event.title }}</h4>
-          <div class="text-sm text-gray-600 mb-1">{{ event.start_time.strftime('%b %d, %Y %I:%M %p') }} - {{ event.end_time.strftime('%b %d, %Y %I:%M %p') }}</div>
-          <div class="text-sm text-gray-700 mb-1">{{ event.location }}</div>
-          <div class="text-xs text-blue-700 mb-2">{{ event.category }}</div>
-          <a href="{{ url_for('events.event_details', event_id=event.id) }}" class="text-blue-600 hover:underline">View Details</a>
-        </div>
-      {% else %}
-        <div class="col-span-full text-gray-500">No upcoming events.</div>
-      {% endfor %}
+<div class="min-h-screen bg-base-100">
+  <!-- Navigation -->
+  <div class="navbar bg-base-100/95 backdrop-blur-xl sticky top-0 z-50 shadow-lg border-b border-base-300">
+    <div class="navbar-start">
+      <a href="{{ url_for('index') }}" class="btn btn-ghost">
+        <i class="fas fa-home mr-2"></i>
+        Home
+      </a>
     </div>
-    <h3 class="text-xl font-semibold mt-8 mb-2">Past Events</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {% for event in past_events %}
-        <div class="border rounded-lg p-4 bg-gray-50">
-          {% if event.file_url %}
-            <img src="{{ event.file_url }}" alt="Poster" class="h-32 w-full object-cover mb-2 rounded">
-          {% endif %}
-          <h4 class="font-bold text-lg mb-1">{{ event.title }}</h4>
-          <div class="text-sm text-gray-600 mb-1">{{ event.start_time.strftime('%b %d, %Y %I:%M %p') }} - {{ event.end_time.strftime('%b %d, %Y %I:%M %p') }}</div>
-          <div class="text-sm text-gray-700 mb-1">{{ event.location }}</div>
-          <div class="text-xs text-blue-700 mb-2">{{ event.category }}</div>
-          <a href="{{ url_for('events.event_details', event_id=event.id) }}" class="text-blue-600 hover:underline">View Details</a>
+    <div class="navbar-center">
+      <h1 class="text-xl font-bold">Campus Events</h1>
+    </div>
+    <div class="navbar-end gap-2">
+      <!-- Theme Toggle -->
+      <label class="swap swap-rotate btn btn-ghost btn-circle">
+        <input type="checkbox" class="theme-controller" value="dark" onchange="toggleTheme()" />
+        <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+        </svg>
+        <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+        </svg>
+      </label>
+
+      {% if current_user.role in ['faculty', 'admin', 'cr'] %}
+      <a href="{{ url_for('events.event_create') }}" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus mr-2"></i>
+        Create Event
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Header Section -->
+    <div class="hero bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 rounded-2xl mb-8">
+      <div class="hero-content text-center py-12">
+        <div class="max-w-md">
+          <div class="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <i class="fas fa-calendar-alt text-white text-3xl"></i>
+          </div>
+          <h1 class="text-4xl font-bold text-base-content mb-4">Campus Events</h1>
+          <p class="text-base-content/70 text-lg">Discover and participate in exciting campus activities</p>
         </div>
-      {% else %}
-        <div class="col-span-full text-gray-500">No past events.</div>
-      {% endfor %}
+      </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="bg-base-100 rounded-2xl shadow-xl border border-base-300 p-6 mb-8">
+      <div class="flex flex-col lg:flex-row gap-4 items-end">
+        <div class="flex-1">
+          <label class="block text-sm font-semibold text-base-content mb-2">
+            <i class="fas fa-search mr-2 text-primary"></i>
+            Search Events
+          </label>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search by title, location, or category..."
+            class="input input-bordered w-full rounded-xl focus:input-primary transition-all duration-300"
+            value="{{ request.args.get('q', '') }}"
+          />
+        </div>
+
+        <div class="w-full lg:w-48">
+          <label class="block text-sm font-semibold text-base-content mb-2">
+            <i class="fas fa-filter mr-2 text-primary"></i>
+            Filter
+          </label>
+          <select id="type-filter" class="select select-bordered w-full rounded-xl focus:select-primary transition-all duration-300">
+            <option value="upcoming" {% if request.args.get('type') == 'upcoming' %}selected{% endif %}>Upcoming Events</option>
+            <option value="past" {% if request.args.get('type') == 'past' %}selected{% endif %}>Past Events</option>
+            <option value="all" {% if request.args.get('type') == 'all' %}selected{% endif %}>All Events</option>
+          </select>
+        </div>
+
+        <button onclick="applyFilters()" class="btn btn-primary rounded-xl">
+          <i class="fas fa-filter mr-2"></i>
+          Apply Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ upcoming_events|length }}</h3>
+              <p class="text-blue-100">Upcoming Events</p>
+            </div>
+            <i class="fas fa-calendar-check text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-green-500 to-green-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ past_events|length }}</h3>
+              <p class="text-green-100">Past Events</p>
+            </div>
+            <i class="fas fa-history text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ upcoming_events|length + past_events|length }}</h3>
+              <p class="text-purple-100">Total Events</p>
+            </div>
+            <i class="fas fa-calendar-alt text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Events Tabs -->
+    <div class="bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden">
+      <div class="tabs tabs-bordered">
+        <a class="tab tab-active" onclick="showTab('upcoming')">Upcoming Events</a>
+        <a class="tab" onclick="showTab('past')">Past Events</a>
+      </div>
+
+      <!-- Upcoming Events -->
+      <div id="upcoming-tab" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for event in upcoming_events %}
+          <div class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-2xl transition-all duration-300 event-card" data-title="{{ event.title|lower }}" data-location="{{ event.location|lower }}" data-category="{{ event.category|lower }}">
+            {% if event.file_url %}
+            <figure class="px-6 pt-6">
+              <img src="{{ event.file_url }}" alt="Event Poster" class="rounded-xl h-48 w-full object-cover" />
+            </figure>
+            {% endif %}
+            <div class="card-body">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="card-title text-lg line-clamp-2">{{ event.title }}</h3>
+                {% if event.category %}
+                <div class="badge badge-primary badge-outline">{{ event.category }}</div>
+                {% endif %}
+              </div>
+
+              <div class="space-y-2 mb-4">
+                <div class="flex items-center gap-2 text-sm text-base-content/70">
+                  <i class="fas fa-calendar text-primary"></i>
+                  <span>{{ event.start_time.strftime('%b %d, %Y') }}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-base-content/70">
+                  <i class="fas fa-clock text-primary"></i>
+                  <span>{{ event.start_time.strftime('%I:%M %p') }} - {{ event.end_time.strftime('%I:%M %p') }}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-base-content/70">
+                  <i class="fas fa-map-marker-alt text-primary"></i>
+                  <span class="truncate">{{ event.location }}</span>
+                </div>
+              </div>
+
+              <div class="card-actions justify-between items-center">
+                <a href="{{ url_for('events.event_details', event_id=event.id) }}" class="btn btn-primary btn-sm">
+                  <i class="fas fa-eye mr-1"></i>
+                  View Details
+                </a>
+                <button data-action="share-event" data-event-id="{{ event.id }}" class="btn btn-ghost btn-sm">
+                  <i class="fas fa-share mr-1"></i>
+                  Share
+                </button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        {% if not upcoming_events %}
+        <div class="text-center py-16">
+          <div class="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-calendar-alt text-4xl text-base-content/30"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-base-content/70 mb-2">No Upcoming Events</h3>
+          <p class="text-base-content/50">Check back later for exciting campus events!</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Past Events -->
+      <div id="past-tab" class="p-6 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for event in past_events %}
+          <div class="card bg-base-100 shadow-lg border border-base-300 hover:shadow-2xl transition-all duration-300 event-card opacity-75" data-title="{{ event.title|lower }}" data-location="{{ event.location|lower }}" data-category="{{ event.category|lower }}">
+            {% if event.file_url %}
+            <figure class="px-6 pt-6">
+              <img src="{{ event.file_url }}" alt="Event Poster" class="rounded-xl h-48 w-full object-cover grayscale" />
+            </figure>
+            {% endif %}
+            <div class="card-body">
+              <div class="flex items-start justify-between mb-3">
+                <h3 class="card-title text-lg line-clamp-2">{{ event.title }}</h3>
+                {% if event.category %}
+                <div class="badge badge-secondary badge-outline">{{ event.category }}</div>
+                {% endif %}
+              </div>
+
+              <div class="space-y-2 mb-4">
+                <div class="flex items-center gap-2 text-sm text-base-content/70">
+                  <i class="fas fa-calendar text-secondary"></i>
+                  <span>{{ event.start_time.strftime('%b %d, %Y') }}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-base-content/70">
+                  <i class="fas fa-clock text-secondary"></i>
+                  <span>{{ event.start_time.strftime('%I:%M %p') }} - {{ event.end_time.strftime('%I:%M %p') }}</span>
+                </div>
+                <div class="flex items-center gap-2 text-sm text-base-content/70">
+                  <i class="fas fa-map-marker-alt text-secondary"></i>
+                  <span class="truncate">{{ event.location }}</span>
+                </div>
+              </div>
+
+              <div class="card-actions justify-between items-center">
+                <a href="{{ url_for('events.event_details', event_id=event.id) }}" class="btn btn-secondary btn-sm">
+                  <i class="fas fa-eye mr-1"></i>
+                  View Details
+                </a>
+                <button data-action="share-event" data-event-id="{{ event.id }}" class="btn btn-ghost btn-sm">
+                  <i class="fas fa-share mr-1"></i>
+                  Share
+                </button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        {% if not past_events %}
+        <div class="text-center py-16">
+          <div class="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <i class="fas fa-history text-4xl text-base-content/30"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-base-content/70 mb-2">No Past Events</h3>
+          <p class="text-base-content/50">Past events will appear here once they occur.</p>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  // Theme toggle functionality
+  function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+
+  // Load saved theme
+  document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeController = document.querySelector('.theme-controller');
+    if (themeController) {
+      themeController.checked = savedTheme === 'dark';
+    }
+
+    // Initialize search functionality
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', filterEvents);
+    }
+
+    const typeFilter = document.getElementById('type-filter');
+    if (typeFilter) {
+      typeFilter.addEventListener('change', filterEvents);
+    }
+
+    // Add event listeners for event actions
+    document.addEventListener('click', function(e) {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+
+      const action = target.getAttribute('data-action');
+      const eventId = target.getAttribute('data-event-id');
+
+      switch(action) {
+        case 'share-event':
+          e.preventDefault();
+          shareEvent(eventId);
+          break;
+      }
+    });
+  });
+
+  // Apply filters from form
+  function applyFilters() {
+    const searchTerm = document.getElementById('search-input').value;
+    const type = document.getElementById('type-filter').value;
+
+    let url = '{{ url_for("events.event_list") }}';
+    const params = new URLSearchParams();
+
+    if (searchTerm) params.append('q', searchTerm);
+    if (type && type !== 'upcoming') params.append('type', type);
+
+    if (params.toString()) {
+      url += '?' + params.toString();
+    }
+
+    window.location.href = url;
+  }
+
+  // Real-time search and filter
+  function filterEvents() {
+    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const typeFilter = document.getElementById('type-filter').value;
+
+    const eventCards = document.querySelectorAll('.event-card');
+
+    eventCards.forEach(card => {
+      const title = card.dataset.title;
+      const location = card.dataset.location;
+      const category = card.dataset.category;
+
+      const matchesSearch = !searchTerm ||
+        title.includes(searchTerm) ||
+        location.includes(searchTerm) ||
+        category.includes(searchTerm);
+
+      if (matchesSearch) {
+        card.style.display = '';
+        card.classList.add('animate-fade-in');
+      } else {
+        card.style.display = 'none';
+        card.classList.remove('animate-fade-in');
+      }
+    });
+  }
+
+  // Tab switching
+  function showTab(tabName) {
+    const upcomingTab = document.getElementById('upcoming-tab');
+    const pastTab = document.getElementById('past-tab');
+    const tabs = document.querySelectorAll('.tab');
+
+    // Remove active class from all tabs
+    tabs.forEach(tab => tab.classList.remove('tab-active'));
+
+    if (tabName === 'upcoming') {
+      upcomingTab.classList.remove('hidden');
+      pastTab.classList.add('hidden');
+      tabs[0].classList.add('tab-active');
+    } else {
+      upcomingTab.classList.add('hidden');
+      pastTab.classList.remove('hidden');
+      tabs[1].classList.add('tab-active');
+    }
+  }
+
+  // Share event
+  function shareEvent(eventId) {
+    const url = window.location.href.split('?')[0] + '/details/' + eventId;
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('Event link copied to clipboard!', 'success');
+    });
+  }
+
+  // Toast notification
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-sm shadow-lg`;
+    toast.innerHTML = `
+      <span>${message}</span>
+      <button class="btn btn-sm btn-circle btn-ghost" onclick="this.parentElement.remove()">×</button>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+</script>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-clamp: 2;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
 {% endblock %}
