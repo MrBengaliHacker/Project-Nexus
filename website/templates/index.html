@@ -60,9 +60,10 @@
         </div>
       </div>
       <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-box w-52">
-        <li><a class="font-medium"><i class="fas fa-sign-in-alt mr-2"></i>Student Login</a></li>
-        <li><a class="font-medium"><i class="fas fa-chalkboard-teacher mr-2"></i>Faculty Login</a></li>
-        <li><a class="font-medium"><i class="fas fa-user-shield mr-2"></i>Admin Login</a></li>
+        <li><a href="{{ url_for('auth.login') }}" class="font-medium"><i class="fas fa-sign-in-alt mr-2"></i>Student Login</a></li>
+        <li><a href="{{ url_for('auth.login') }}" class="font-medium"><i class="fas fa-chalkboard-teacher mr-2"></i>Faculty Login</a></li>
+        <li><a href="{{ url_for('auth.login') }}" class="font-medium"><i class="fas fa-user-shield mr-2"></i>Admin Login</a></li>
+        <li><a href="{{ url_for('auth.register') }}" class="font-medium"><i class="fas fa-user-plus mr-2"></i>Register</a></li>
       </ul>
     </div>
   </div>
