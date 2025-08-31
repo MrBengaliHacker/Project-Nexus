@@ -1,8 +1,488 @@
-{% extends "base.html" %}
+  {% extends "base.html" %}
 
-{% block title %}Student - TeamNexus{% endblock %}
+{% block title %}Student Dashboard - KampusConnect{% endblock %}
 
 {% block content %}
-<h1>Hello Student</h1>
-<p><a href="{{ url_for('auth.logout') }}">Logout</a></p>
+<div class="min-h-screen bg-base-100">
+  <!-- Navigation -->
+  <div class="navbar bg-base-100/95 backdrop-blur-xl sticky top-0 z-50 shadow-lg border-b border-base-300">
+    <div class="navbar-start">
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+          </svg>
+        </div>
+        <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-xl bg-base-100 rounded-box w-52">
+          <li><a href="#dashboard" class="font-medium">Dashboard</a></li>
+          <li><a href="#academic" class="font-medium">Academic</a></li>
+          <li><a href="#resources" class="font-medium">Resources</a></li>
+          <li><a href="#campus" class="font-medium">Campus Life</a></li>
+          <li><a href="#profile" class="font-medium">Profile</a></li>
+        </ul>
+      </div>
+      <a class="btn btn-ghost text-xl font-bold">
+        <div class="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center mr-2">
+          <i class="fas fa-graduation-cap text-white text-sm"></i>
+        </div>
+        Student Portal
+      </a>
+    </div>
+    <div class="navbar-center hidden lg:flex">
+      <ul class="menu menu-horizontal px-1 gap-2">
+        <li><a href="#dashboard" class="hover:text-primary font-medium rounded-lg">Dashboard</a></li>
+        <li><a href="#academic" class="hover:text-primary font-medium rounded-lg">Academic</a></li>
+        <li><a href="#resources" class="hover:text-primary font-medium rounded-lg">Resources</a></li>
+        <li><a href="#campus" class="hover:text-primary font-medium rounded-lg">Campus Life</a></li>
+        <li><a href="#profile" class="hover:text-primary font-medium rounded-lg">Profile</a></li>
+      </ul>
+    </div>
+    <div class="navbar-end gap-2">
+      <!-- Theme Toggle -->
+      <label class="swap swap-rotate btn btn-ghost btn-circle">
+        <input type="checkbox" class="theme-controller" value="dark" onchange="toggleTheme()" />
+        <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+        </svg>
+        <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+        </svg>
+      </label>
+
+      <!-- User Menu -->
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+          <div class="w-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+            <i class="fas fa-user text-white text-sm"></i>
+          </div>
+        </div>
+        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-box w-52">
+          <li><a href="#profile" class="font-medium"><i class="fas fa-user mr-2"></i>My Profile</a></li>
+          <li><a href="#settings" class="font-medium"><i class="fas fa-cog mr-2"></i>Settings</a></li>
+          <li><a href="{{ url_for('auth.logout') }}" class="font-medium text-error"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8">
+    <!-- Welcome Section -->
+    <section id="dashboard" class="mb-12">
+      <div class="hero bg-gradient-to-r from-primary/10 via-secondary/5 to-accent/10 rounded-3xl p-8 mb-8">
+        <div class="hero-content text-center">
+          <div class="max-w-4xl">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Welcome back, Student! 🎓
+            </h1>
+            <p class="text-lg md:text-xl text-base-content/70 mb-6">
+              Your personalized dashboard for academic success and campus life
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+              <div class="stat bg-base-100/50 backdrop-blur rounded-2xl p-4 shadow-lg">
+                <div class="stat-title">Current Semester</div>
+                <div class="stat-value text-primary">6th</div>
+              </div>
+              <div class="stat bg-base-100/50 backdrop-blur rounded-2xl p-4 shadow-lg">
+                <div class="stat-title">CGPA</div>
+                <div class="stat-value text-secondary">8.5</div>
+              </div>
+              <div class="stat bg-base-100/50 backdrop-blur rounded-2xl p-4 shadow-lg">
+                <div class="stat-title">Attendance</div>
+                <div class="stat-value text-accent">92%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <a href="#results" class="card bg-gradient-to-br from-primary/10 to-primary/5 hover:from-primary hover:to-primary/20 border border-primary/20 hover:border-primary transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <div class="card-body items-center text-center p-6">
+            <div class="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mb-4">
+              <i class="fas fa-chart-line text-3xl text-primary"></i>
+            </div>
+            <h3 class="card-title text-lg">View Results</h3>
+            <p class="text-sm text-base-content/70">Check your academic performance</p>
+          </div>
+        </a>
+
+        <a href="#attendance" class="card bg-gradient-to-br from-secondary/10 to-secondary/5 hover:from-secondary hover:to-secondary/20 border border-secondary/20 hover:border-secondary transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <div class="card-body items-center text-center p-6">
+            <div class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mb-4">
+              <i class="fas fa-calendar-check text-3xl text-secondary"></i>
+            </div>
+            <h3 class="card-title text-lg">Attendance</h3>
+            <p class="text-sm text-base-content/70">Track your attendance record</p>
+          </div>
+        </a>
+
+        <a href="{{ url_for('resources.notes_list') }}" class="card bg-gradient-to-br from-accent/10 to-accent/5 hover:from-accent hover:to-accent/20 border border-accent/20 hover:border-accent transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <div class="card-body items-center text-center p-6">
+            <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-4">
+              <i class="fas fa-book-open text-3xl text-accent"></i>
+            </div>
+            <h3 class="card-title text-lg">Study Notes</h3>
+            <p class="text-sm text-base-content/70">Access study materials</p>
+          </div>
+        </a>
+
+        <a href="{{ url_for('announcements.announcement_list') }}" class="card bg-gradient-to-br from-info/10 to-info/5 hover:from-info hover:to-info/20 border border-info/20 hover:border-info transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <div class="card-body items-center text-center p-6">
+            <div class="w-16 h-16 bg-info/20 rounded-2xl flex items-center justify-center mb-4">
+              <i class="fas fa-bullhorn text-3xl text-info"></i>
+            </div>
+            <h3 class="card-title text-lg">Announcements</h3>
+            <p class="text-sm text-base-content/70">Stay updated with news</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Academic Section -->
+    <section id="academic" class="mb-12">
+      <h2 class="text-3xl font-bold mb-8 flex items-center">
+        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center mr-4">
+          <i class="fas fa-graduation-cap text-white"></i>
+        </div>
+        Academic Performance
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Results Card -->
+        <div class="card bg-base-100 shadow-xl border-t-4 border-primary">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-6 flex items-center">
+              <i class="fas fa-chart-bar mr-3 text-primary"></i>
+              Semester Results
+            </h3>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center p-4 bg-primary/5 rounded-xl">
+                <span class="font-semibold">Current Semester (6th)</span>
+                <span class="text-primary font-bold text-lg">SGPA: 8.7</span>
+              </div>
+              <div class="flex justify-between items-center p-4 bg-secondary/5 rounded-xl">
+                <span class="font-semibold">Overall CGPA</span>
+                <span class="text-secondary font-bold text-lg">8.5</span>
+              </div>
+              <div class="flex justify-between items-center p-4 bg-accent/5 rounded-xl">
+                <span class="font-semibold">Last Semester</span>
+                <span class="text-accent font-bold text-lg">SGPA: 8.3</span>
+              </div>
+            </div>
+            <div class="card-actions justify-end mt-6">
+              <button class="btn btn-primary btn-outline">View Detailed Results</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance Card -->
+        <div class="card bg-base-100 shadow-xl border-t-4 border-secondary">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-6 flex items-center">
+              <i class="fas fa-calendar-alt mr-3 text-secondary"></i>
+              Attendance Overview
+            </h3>
+            <div class="space-y-4">
+              <div class="flex justify-between items-center p-4 bg-success/5 rounded-xl">
+                <span class="font-semibold">Overall Attendance</span>
+                <span class="text-success font-bold text-lg">92%</span>
+              </div>
+              <div class="flex justify-between items-center p-4 bg-warning/5 rounded-xl">
+                <span class="font-semibold">This Month</span>
+                <span class="text-warning font-bold text-lg">88%</span>
+              </div>
+              <div class="flex justify-between items-center p-4 bg-info/5 rounded-xl">
+                <span class="font-semibold">Classes Today</span>
+                <span class="text-info font-bold text-lg">4/5</span>
+              </div>
+            </div>
+            <div class="card-actions justify-end mt-6">
+              <button class="btn btn-secondary btn-outline">View Attendance Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timetable Preview -->
+      <div class="card bg-base-100 shadow-xl border-t-4 border-accent mt-8">
+        <div class="card-body">
+          <h3 class="card-title text-2xl mb-6 flex items-center">
+            <i class="fas fa-clock mr-3 text-accent"></i>
+            Today's Schedule
+          </h3>
+          <div class="overflow-x-auto">
+            <table class="table table-zebra w-full">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Subject</th>
+                  <th>Location</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>9:00 AM</td>
+                  <td>Data Structures</td>
+                  <td>Room 201</td>
+                  <td><span class="badge badge-success">Present</span></td>
+                </tr>
+                <tr>
+                  <td>10:00 AM</td>
+                  <td>Algorithms</td>
+                  <td>Lab 1</td>
+                  <td><span class="badge badge-warning">Upcoming</span></td>
+                </tr>
+                <tr>
+                  <td>11:00 AM</td>
+                  <td>Database Systems</td>
+                  <td>Room 301</td>
+                  <td><span class="badge badge-neutral">Scheduled</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-actions justify-end mt-6">
+            <button class="btn btn-accent btn-outline">View Full Timetable</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="mb-12">
+      <h2 class="text-3xl font-bold mb-8 flex items-center">
+        <div class="w-10 h-10 bg-accent rounded-xl flex items-center justify-center mr-4">
+          <i class="fas fa-book text-white"></i>
+        </div>
+        Study Resources
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="{{ url_for('resources.notes_list') }}" class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-t-4 border-primary">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-file-pdf text-3xl text-primary"></i>
+            </div>
+            <h3 class="card-title text-xl mb-2">Lecture Notes</h3>
+            <p class="text-base-content/70">Access comprehensive study materials</p>
+          </div>
+        </a>
+
+        <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-t-4 border-secondary">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-video text-3xl text-secondary"></i>
+            </div>
+            <h3 class="card-title text-xl mb-2">Video Lectures</h3>
+            <p class="text-base-content/70">Watch recorded lectures</p>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-t-4 border-accent">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-question-circle text-3xl text-accent"></i>
+            </div>
+            <h3 class="card-title text-xl mb-2">Practice Questions</h3>
+            <p class="text-base-content/70">Test your knowledge</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campus Life Section -->
+    <section id="campus" class="mb-12">
+      <h2 class="text-3xl font-bold mb-8 flex items-center">
+        <div class="w-10 h-10 bg-info rounded-xl flex items-center justify-center mr-4">
+          <i class="fas fa-university text-white"></i>
+        </div>
+        Campus Life
+      </h2>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Announcements -->
+        <div class="card bg-base-100 shadow-xl border-t-4 border-primary">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-6 flex items-center">
+              <i class="fas fa-bullhorn mr-3 text-primary"></i>
+              Recent Announcements
+            </h3>
+            <div class="space-y-4">
+              <div class="p-4 bg-primary/5 rounded-xl border-l-4 border-primary">
+                <h4 class="font-semibold">Mid-term Exam Schedule Released</h4>
+                <p class="text-sm text-base-content/70 mt-1">Check your exam timetable for upcoming assessments</p>
+                <span class="text-xs text-base-content/50 mt-2 block">2 hours ago</span>
+              </div>
+              <div class="p-4 bg-secondary/5 rounded-xl border-l-4 border-secondary">
+                <h4 class="font-semibold">Campus Fest Registration Open</h4>
+                <p class="text-sm text-base-content/70 mt-1">Register for various events and competitions</p>
+                <span class="text-xs text-base-content/50 mt-2 block">1 day ago</span>
+              </div>
+            </div>
+            <div class="card-actions justify-end mt-6">
+              <a href="{{ url_for('announcements.announcement_list') }}" class="btn btn-primary btn-outline">View All Announcements</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events -->
+        <div class="card bg-base-100 shadow-xl border-t-4 border-secondary">
+          <div class="card-body">
+            <h3 class="card-title text-2xl mb-6 flex items-center">
+              <i class="fas fa-calendar-star mr-3 text-secondary"></i>
+              Upcoming Events
+            </h3>
+            <div class="space-y-4">
+              <div class="p-4 bg-secondary/5 rounded-xl border-l-4 border-secondary">
+                <h4 class="font-semibold">Tech Workshop: AI & ML</h4>
+                <p class="text-sm text-base-content/70 mt-1">Hands-on workshop on Artificial Intelligence</p>
+                <span class="text-xs text-base-content/50 mt-2 block">Tomorrow, 2:00 PM</span>
+              </div>
+              <div class="p-4 bg-accent/5 rounded-xl border-l-4 border-accent">
+                <h4 class="font-semibold">Career Fair 2025</h4>
+                <p class="text-sm text-base-content/70 mt-1">Meet top companies and explore opportunities</p>
+                <span class="text-xs text-base-content/50 mt-2 block">Next Week</span>
+              </div>
+            </div>
+            <div class="card-actions justify-end mt-6">
+              <a href="{{ url_for('events.event_list') }}" class="btn btn-secondary btn-outline">View All Events</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feed Preview -->
+      <div class="card bg-base-100 shadow-xl border-t-4 border-accent mt-8">
+        <div class="card-body">
+          <h3 class="card-title text-2xl mb-6 flex items-center">
+            <i class="fas fa-rss mr-3 text-accent"></i>
+            Campus Feed
+          </h3>
+          <div class="space-y-4">
+            <div class="flex items-start space-x-4 p-4 bg-base-200 rounded-xl">
+              <div class="avatar">
+                <div class="w-10 rounded-full bg-primary">
+                  <span class="text-white font-bold">JD</span>
+                </div>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-semibold">John Doe</h4>
+                <p class="text-sm text-base-content/70">Just finished an amazing project on machine learning! The possibilities are endless 🚀</p>
+                <div class="flex items-center mt-2 text-xs text-base-content/50">
+                  <span>2 hours ago</span>
+                  <span class="mx-2">•</span>
+                  <span>12 likes</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-start space-x-4 p-4 bg-base-200 rounded-xl">
+              <div class="avatar">
+                <div class="w-10 rounded-full bg-secondary">
+                  <span class="text-white font-bold">SM</span>
+                </div>
+              </div>
+              <div class="flex-1">
+                <h4 class="font-semibold">Sarah Miller</h4>
+                <p class="text-sm text-base-content/70">Anyone up for a study group session this weekend? Let's tackle those algorithms together! 📚</p>
+                <div class="flex items-center mt-2 text-xs text-base-content/50">
+                  <span>4 hours ago</span>
+                  <span class="mx-2">•</span>
+                  <span>8 likes</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-actions justify-end mt-6">
+            <a href="{{ url_for('feed.feed') }}" class="btn btn-accent btn-outline">Visit Campus Feed</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="mb-12">
+      <h2 class="text-3xl font-bold mb-8 flex items-center">
+        <div class="w-10 h-10 bg-success rounded-xl flex items-center justify-center mr-4">
+          <i class="fas fa-user text-white"></i>
+        </div>
+        My Profile
+      </h2>
+
+      <div class="card bg-base-100 shadow-xl border-t-4 border-success">
+        <div class="card-body">
+          <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8">
+            <div class="avatar">
+              <div class="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                <span class="text-3xl text-white font-bold">{{ current_user.name[0] if current_user.name else 'S' }}</span>
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold mb-2">{{ current_user.name }}</h3>
+              <p class="text-base-content/70 mb-4">{{ current_user.email }}</p>
+              <div class="flex flex-wrap gap-4">
+                <div class="badge badge-primary badge-lg">Student</div>
+                <div class="badge badge-secondary badge-lg">Semester 6</div>
+                <div class="badge badge-accent badge-lg">Computer Science</div>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="btn btn-success btn-outline">Edit Profile</button>
+              <button class="btn btn-neutral btn-outline">Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  // Smooth scrolling for navigation links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Theme toggle functionality
+  function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+
+  // Load saved theme
+  document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeController = document.querySelector('.theme-controller');
+    if (themeController) {
+      themeController.checked = savedTheme === 'dark';
+    }
+  });
+
+  // Add some interactive animations
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+      this.style.transform = 'translateY(-5px)';
+    });
+    card.addEventListener('mouseleave', function() {
+      this.style.transform = 'translateY(0)';
+    });
+  });
+</script>
+
 {% endblock %}

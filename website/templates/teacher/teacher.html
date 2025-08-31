@@ -1,8 +1,385 @@
 {% extends "base.html" %}
 
-{% block title %}Teacher - TeamNexus{% endblock %}
+{% block title %}Teacher Dashboard - KampusConnect{% endblock %}
 
 {% block content %}
-<h1>Hello Teacher</h1>
-<p><a href="{{ url_for('auth.logout') }}">Logout</a></p>
+<div class="min-h-screen bg-base-100">
+  <!-- Navigation -->
+  <div class="navbar bg-base-100/95 backdrop-blur-xl sticky top-0 z-50 shadow-lg border-b border-base-300">
+    <div class="navbar-start">
+      <a href="{{ url_for('index') }}" class="btn btn-ghost">
+        <i class="fas fa-home mr-2"></i>
+        Home
+      </a>
+    </div>
+    <div class="navbar-center">
+      <h1 class="text-xl font-bold">Teacher Dashboard</h1>
+    </div>
+    <div class="navbar-end gap-2">
+      <!-- Theme Toggle -->
+      <label class="swap swap-rotate btn btn-ghost btn-circle">
+        <input type="checkbox" class="theme-controller" value="dark" onchange="toggleTheme()" />
+        <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+        </svg>
+        <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+        </svg>
+      </label>
+
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-outline btn-error btn-sm">
+        <i class="fas fa-sign-out-alt mr-2"></i>
+        Logout
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Welcome Section -->
+    <div class="hero bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 rounded-2xl mb-8">
+      <div class="hero-content text-center py-12">
+        <div class="max-w-md">
+          <div class="w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+            <i class="fas fa-graduation-cap text-white text-3xl"></i>
+          </div>
+          <h1 class="text-4xl font-bold text-base-content mb-4">Welcome, Teacher</h1>
+          <p class="text-base-content/70 text-lg">Guide your students and manage your classroom activities</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">18</h3>
+              <p class="text-blue-100">My Classes</p>
+            </div>
+            <i class="fas fa-chalkboard text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-green-500 to-green-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">142</h3>
+              <p class="text-green-100">Students</p>
+            </div>
+            <i class="fas fa-user-graduate text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">6</h3>
+              <p class="text-purple-100">Assignments</p>
+            </div>
+            <i class="fas fa-clipboard-check text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">95%</h3>
+              <p class="text-orange-100">Attendance</p>
+            </div>
+            <i class="fas fa-chart-line text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teacher Actions Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <!-- Class Management -->
+      <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300">
+        <div class="card-body p-6">
+          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-chalkboard text-blue-600 text-xl"></i>
+          </div>
+          <h3 class="card-title text-lg mb-2">Class Management</h3>
+          <p class="text-base-content/60 mb-4">Organize your classes and manage student groups</p>
+          <div class="card-actions justify-end">
+            <button onclick="manageClasses()" class="btn btn-primary btn-sm">
+              <i class="fas fa-cog mr-2"></i>
+              Manage Classes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Progress -->
+      <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300">
+        <div class="card-body p-6">
+          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-chart-bar text-green-600 text-xl"></i>
+          </div>
+          <h3 class="card-title text-lg mb-2">Student Progress</h3>
+          <p class="text-base-content/60 mb-4">Track student performance and learning outcomes</p>
+          <div class="card-actions justify-end">
+            <button onclick="viewProgress()" class="btn btn-success btn-sm">
+              <i class="fas fa-eye mr-2"></i>
+              View Progress
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lesson Planning -->
+      <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300">
+        <div class="card-body p-6">
+          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-book-open text-purple-600 text-xl"></i>
+          </div>
+          <h3 class="card-title text-lg mb-2">Lesson Planning</h3>
+          <p class="text-base-content/60 mb-4">Create and organize your lesson plans</p>
+          <div class="card-actions justify-end">
+            <button onclick="planLessons()" class="btn btn-secondary btn-sm">
+              <i class="fas fa-edit mr-2"></i>
+              Plan Lessons
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance -->
+      <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300">
+        <div class="card-body p-6">
+          <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-calendar-check text-orange-600 text-xl"></i>
+          </div>
+          <h3 class="card-title text-lg mb-2">Attendance</h3>
+          <p class="text-base-content/60 mb-4">Take and manage student attendance records</p>
+          <div class="card-actions justify-end">
+            <button onclick="manageAttendance()" class="btn btn-warning btn-sm">
+              <i class="fas fa-check-circle mr-2"></i>
+              Take Attendance
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Communication -->
+      <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300">
+        <div class="card-body p-6">
+          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-comments text-red-600 text-xl"></i>
+          </div>
+          <h3 class="card-title text-lg mb-2">Parent Communication</h3>
+          <p class="text-base-content/60 mb-4">Communicate with parents and guardians</p>
+          <div class="card-actions justify-end">
+            <button onclick="contactParents()" class="btn btn-error btn-sm">
+              <i class="fas fa-envelope mr-2"></i>
+              Contact Parents
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resources -->
+      <div class="card bg-base-100 shadow-xl border border-base-300 hover:shadow-2xl transition-all duration-300">
+        <div class="card-body p-6">
+          <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-folder-open text-indigo-600 text-xl"></i>
+          </div>
+          <h3 class="card-title text-lg mb-2">Teaching Resources</h3>
+          <p class="text-base-content/60 mb-4">Access and share educational materials</p>
+          <div class="card-actions justify-end">
+            <a href="{{ url_for('resources.resources') }}" class="btn btn-info btn-sm">
+              <i class="fas fa-file-alt mr-2"></i>
+              Resources
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's Classes -->
+    <div class="bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden mb-8">
+      <div class="p-6 border-b border-base-300">
+        <h2 class="text-2xl font-bold flex items-center">
+          <i class="fas fa-calendar-day mr-3 text-primary"></i>
+          Today's Classes
+        </h2>
+      </div>
+
+      <div class="p-6">
+        <div class="space-y-4">
+          <!-- Class Items -->
+          <div class="flex items-center gap-4 p-4 bg-base-50 rounded-xl">
+            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-clock text-blue-600"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-base-content">Mathematics 8A</h4>
+              <p class="text-sm text-base-content/60">Room 101 - Algebra Fundamentals</p>
+              <p class="text-xs text-base-content/50">28 students enrolled</p>
+            </div>
+            <div class="text-right">
+              <span class="badge badge-primary">8:00 AM - 9:00 AM</span>
+              <button onclick="startClass('math8a')" class="btn btn-sm btn-primary ml-2">
+                <i class="fas fa-play mr-1"></i>
+                Start
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 bg-base-50 rounded-xl">
+            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-clock text-green-600"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-base-content">Science 8B</h4>
+              <p class="text-sm text-base-content/60">Lab 203 - Chemistry Experiments</p>
+              <p class="text-xs text-base-content/50">25 students enrolled</p>
+            </div>
+            <div class="text-right">
+              <span class="badge badge-success">10:00 AM - 11:30 AM</span>
+              <button onclick="startClass('science8b')" class="btn btn-sm btn-success ml-2">
+                <i class="fas fa-play mr-1"></i>
+                Start
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 bg-base-50 rounded-xl">
+            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-clock text-purple-600"></i>
+            </div>
+            <div class="flex-1">
+              <h4 class="font-semibold text-base-content">English Literature</h4>
+              <p class="text-sm text-base-content/60">Room 105 - Poetry Analysis</p>
+              <p class="text-xs text-base-content/50">22 students enrolled</p>
+            </div>
+            <div class="text-right">
+              <span class="badge badge-secondary">1:00 PM - 2:30 PM</span>
+              <button onclick="startClass('english')" class="btn btn-sm btn-secondary ml-2">
+                <i class="fas fa-play mr-1"></i>
+                Start
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden">
+      <div class="p-6 border-b border-base-300">
+        <h2 class="text-2xl font-bold flex items-center">
+          <i class="fas fa-history mr-3 text-primary"></i>
+          Recent Activity
+        </h2>
+      </div>
+
+      <div class="p-6">
+        <div class="space-y-4">
+          <!-- Activity Items -->
+          <div class="flex items-center gap-4 p-4 bg-base-50 rounded-xl">
+            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-check-circle text-green-600"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium text-base-content">Attendance taken</p>
+              <p class="text-sm text-base-content/60">Mathematics 8A - 26/28 students present</p>
+            </div>
+            <span class="text-xs text-base-content/50">1 hour ago</span>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 bg-base-50 rounded-xl">
+            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-plus-circle text-blue-600"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium text-base-content">Assignment created</p>
+              <p class="text-sm text-base-content/60">Science Lab Report due next Friday</p>
+            </div>
+            <span class="text-xs text-base-content/50">3 hours ago</span>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 bg-base-50 rounded-xl">
+            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+              <i class="fas fa-envelope text-purple-600"></i>
+            </div>
+            <div class="flex-1">
+              <p class="font-medium text-base-content">Parent contacted</p>
+              <p class="text-sm text-base-content/60">Follow-up email sent to John Smith's parents</p>
+            </div>
+            <span class="text-xs text-base-content/50">1 day ago</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Theme toggle functionality
+  function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+
+  // Load saved theme
+  document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeController = document.querySelector('.theme-controller');
+    if (themeController) {
+      themeController.checked = savedTheme === 'dark';
+    }
+  });
+
+  // Teacher functions
+  function manageClasses() {
+    showToast('Class management functionality coming soon!', 'info');
+  }
+
+  function viewProgress() {
+    showToast('Student progress view coming soon!', 'info');
+  }
+
+  function planLessons() {
+    showToast('Lesson planning functionality coming soon!', 'info');
+  }
+
+  function manageAttendance() {
+    showToast('Attendance management coming soon!', 'info');
+  }
+
+  function contactParents() {
+    showToast('Parent communication coming soon!', 'info');
+  }
+
+  function startClass(classId) {
+    showToast(`Starting class: ${classId}`, 'success');
+  }
+
+  // Toast notification
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-sm shadow-lg`;
+    toast.innerHTML = `
+      <span>${message}</span>
+      <button class="btn btn-sm btn-circle btn-ghost" onclick="this.parentElement.remove()">×</button>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+</script>
+
 {% endblock %}
