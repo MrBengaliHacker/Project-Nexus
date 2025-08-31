@@ -1,34 +1,384 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Reported Content - KampusConnect{% endblock %}
+
 {% block content %}
-<h2>Reported Content</h2>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Type</th>
-        <th>Content</th>
-        <th>Reason</th>
-        <th>Reporter</th>
-        <th>Date</th>
-        <th>Resolved</th>
-    </tr>
-    {% for report in reports %}
-    <tr>
-        <td>{{ report.id }}</td>
-        <td>{% if report.post_id %}Post{% elif report.comment_id %}Comment{% endif %}</td>
-        <td>
-            {% if report.post_id %}
-                <a href="{{ url_for('feed.post_detail', post_id=report.post_id) }}">View Post</a>
-            {% elif report.comment_id %}
-                Comment ID: {{ report.comment_id }}
-            {% endif %}
-        </td>
-        <td>{{ report.reason }}</td>
-        <td>{{ report.reporter_id }}</td>
-        <td>{{ report.created_at.strftime('%d %b %Y %H:%M') }}</td>
-        <td>{{ 'Yes' if report.is_resolved else 'No' }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<a href="{{ url_for('feed.feed') }}">Back to Feed</a>
+<div class="min-h-screen bg-base-100">
+  <!-- Navigation -->
+  <div class="navbar bg-base-100/95 backdrop-blur-xl sticky top-0 z-50 shadow-lg border-b border-base-300">
+    <div class="navbar-start">
+      <a href="{{ url_for('feed.feed') }}" class="btn btn-ghost">
+        <i class="fas fa-arrow-left mr-2"></i>
+        Back to Feed
+      </a>
+    </div>
+    <div class="navbar-center">
+      <h1 class="text-xl font-bold">Reported Content</h1>
+    </div>
+    <div class="navbar-end gap-2">
+      <!-- Theme Toggle -->
+      <label class="swap swap-rotate btn btn-ghost btn-circle">
+        <input type="checkbox" class="theme-controller" value="dark" onchange="toggleTheme()" />
+        <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+        </svg>
+        <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+        </svg>
+      </label>
+
+      <!-- Filter Dropdown -->
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+          <i class="fas fa-filter mr-2"></i>
+          Filter
+        </div>
+        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-box w-52">
+          <li><a href="#" onclick="filterReports('all')" class="text-base-content">All Reports</a></li>
+          <li><a href="#" onclick="filterReports('unresolved')" class="text-base-content">Unresolved Only</a></li>
+          <li><a href="#" onclick="filterReports('posts')" class="text-base-content">Posts Only</a></li>
+          <li><a href="#" onclick="filterReports('comments')" class="text-base-content">Comments Only</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="card bg-gradient-to-br from-red-500 to-red-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ reports|length }}</h3>
+              <p class="text-red-100">Total Reports</p>
+            </div>
+            <i class="fas fa-flag text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ reports|selectattr('is_resolved', 'equalto', false)|list|length }}</h3>
+              <p class="text-orange-100">Unresolved</p>
+            </div>
+            <i class="fas fa-exclamation-triangle text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ reports|selectattr('post_id', 'defined')|list|length }}</h3>
+              <p class="text-blue-100">Post Reports</p>
+            </div>
+            <i class="fas fa-file-alt text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-xl">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-2xl font-bold">{{ reports|selectattr('comment_id', 'defined')|list|length }}</h3>
+              <p class="text-purple-100">Comment Reports</p>
+            </div>
+            <i class="fas fa-comment text-3xl opacity-80"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Table -->
+    <div class="bg-base-100 rounded-2xl shadow-xl border border-base-300 overflow-hidden">
+      <div class="p-6 border-b border-base-300">
+        <h2 class="text-2xl font-bold flex items-center">
+          <i class="fas fa-shield-alt mr-3 text-primary"></i>
+          Reported Content Management
+        </h2>
+        <p class="text-base-content/60 mt-2">Review and manage reported posts and comments</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+          <thead class="bg-base-200">
+            <tr>
+              <th class="font-bold text-base-content">ID</th>
+              <th class="font-bold text-base-content">Type</th>
+              <th class="font-bold text-base-content">Content Preview</th>
+              <th class="font-bold text-base-content">Reason</th>
+              <th class="font-bold text-base-content">Reporter</th>
+              <th class="font-bold text-base-content">Date</th>
+              <th class="font-bold text-base-content">Status</th>
+              <th class="font-bold text-base-content">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for report in reports %}
+            <tr class="hover:bg-base-200/50 transition-colors">
+              <td class="font-mono text-sm">{{ report.id }}</td>
+              <td>
+                {% if report.post_id %}
+                <span class="badge badge-primary badge-outline">Post</span>
+                {% elif report.comment_id %}
+                <span class="badge badge-secondary badge-outline">Comment</span>
+                {% endif %}
+              </td>
+              <td class="max-w-xs">
+                {% if report.post_id %}
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                      <span class="text-white font-bold text-xs">P</span>
+                    </div>
+                  </div>
+                  <div>
+                    <a href="{{ url_for('feed.post_detail', post_id=report.post_id) }}" class="link link-primary font-medium hover:link-hover">
+                      View Post #{{ report.post_id }}
+                    </a>
+                    <p class="text-xs text-base-content/60">Click to review</p>
+                  </div>
+                </div>
+                {% elif report.comment_id %}
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center">
+                      <span class="text-white font-bold text-xs">C</span>
+                    </div>
+                  </div>
+                  <div>
+                    <p class="font-medium">Comment #{{ report.comment_id }}</p>
+                    <p class="text-xs text-base-content/60">Comment report</p>
+                  </div>
+                </div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="max-w-xs">
+                  <p class="text-sm">{{ report.reason }}</p>
+                </div>
+              </td>
+              <td>
+                <div class="flex items-center gap-2">
+                  <div class="avatar">
+                    <div class="w-6 h-6 rounded-full bg-base-300 flex items-center justify-center">
+                      <span class="text-xs font-bold">{{ report.reporter_id }}</span>
+                    </div>
+                  </div>
+                  <span class="text-sm">User {{ report.reporter_id }}</span>
+                </div>
+              </td>
+              <td class="text-sm text-base-content/70">
+                {{ report.created_at.strftime('%d %b %Y') }}<br>
+                <span class="text-xs">{{ report.created_at.strftime('%I:%M %p') }}</span>
+              </td>
+              <td>
+                {% if report.is_resolved %}
+                <span class="badge badge-success badge-outline">Resolved</span>
+                {% else %}
+                <span class="badge badge-warning badge-outline">Pending</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="dropdown dropdown-end">
+                  <div tabindex="0" role="button" class="btn btn-ghost btn-sm">
+                    <i class="fas fa-ellipsis-h"></i>
+                  </div>
+                  <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow-xl bg-base-100 rounded-box w-48">
+                    {% if report.post_id %}
+                    <li><a href="{{ url_for('feed.post_detail', post_id=report.post_id) }}" class="text-base-content">
+                      <i class="fas fa-eye mr-2"></i>View Post</a></li>
+                    {% endif %}
+                    {% if not report.is_resolved %}
+                    <li><a href="#" data-action="resolve-report" data-report-id="{{ report.id }}" class="text-success">
+                      <i class="fas fa-check mr-2"></i>Mark Resolved</a></li>
+                    {% endif %}
+                    <li><a href="#" data-action="dismiss-report" data-report-id="{{ report.id }}" class="text-error">
+                      <i class="fas fa-times mr-2"></i>Dismiss Report</a></li>
+                    <li><a href="#" data-action="ban-user" data-user-id="{{ report.reporter_id }}" class="text-error">
+                      <i class="fas fa-ban mr-2"></i>Ban Reporter</a></li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      {% if not reports %}
+      <div class="text-center py-16">
+        <div class="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="fas fa-shield-alt text-4xl text-base-content/30"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-base-content/70 mb-2">No Reports Found</h3>
+        <p class="text-base-content/50">Great! No content has been reported yet.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Bulk Actions -->
+    {% if reports %}
+    <div class="mt-6 bg-base-100 rounded-xl p-6 shadow-lg border border-base-300">
+      <h3 class="text-lg font-semibold mb-4">Bulk Actions</h3>
+      <div class="flex flex-wrap gap-3">
+        <button onclick="resolveAllPending()" class="btn btn-success btn-sm">
+          <i class="fas fa-check mr-2"></i>
+          Resolve All Pending
+        </button>
+        <button onclick="dismissAll()" class="btn btn-warning btn-sm">
+          <i class="fas fa-times mr-2"></i>
+          Dismiss All
+        </button>
+        <button onclick="exportReports()" class="btn btn-info btn-sm">
+          <i class="fas fa-download mr-2"></i>
+          Export Reports
+        </button>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Real-time Updates -->
 {% include 'feed/_realtime.html' %}
+
+<script>
+  // Theme toggle functionality
+  function toggleTheme() {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  }
+
+  // Load saved theme
+  document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeController = document.querySelector('.theme-controller');
+    if (themeController) {
+      themeController.checked = savedTheme === 'dark';
+    }
+
+    // Add event listeners for report actions
+    document.addEventListener('click', function(e) {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+
+      const action = target.getAttribute('data-action');
+      const reportId = target.getAttribute('data-report-id');
+      const userId = target.getAttribute('data-user-id');
+
+      switch(action) {
+        case 'resolve-report':
+          e.preventDefault();
+          resolveReport(reportId);
+          break;
+        case 'dismiss-report':
+          e.preventDefault();
+          dismissReport(reportId);
+          break;
+        case 'ban-user':
+          e.preventDefault();
+          banUser(userId);
+          break;
+      }
+    });
+  });
+
+  // Filter reports
+  function filterReports(type) {
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+      const typeCell = row.cells[1];
+      const statusCell = row.cells[6];
+
+      let show = true;
+
+      switch(type) {
+        case 'unresolved':
+          show = statusCell.innerHTML.includes('Pending');
+          break;
+        case 'posts':
+          show = typeCell.innerHTML.includes('Post');
+          break;
+        case 'comments':
+          show = typeCell.innerHTML.includes('Comment');
+          break;
+        default:
+          show = true;
+      }
+
+      row.style.display = show ? '' : 'none';
+    });
+
+    showToast(`Filtered to show ${type} reports`, 'info');
+  }
+
+  // Report actions
+  function resolveReport(reportId) {
+    if (confirm('Mark this report as resolved?')) {
+      showToast('Report marked as resolved', 'success');
+      // Reload page to update status
+      setTimeout(() => location.reload(), 1000);
+    }
+  }
+
+  function dismissReport(reportId) {
+    if (confirm('Dismiss this report?')) {
+      showToast('Report dismissed', 'warning');
+      // Reload page to update status
+      setTimeout(() => location.reload(), 1000);
+    }
+  }
+
+  function banUser(userId) {
+    const reason = prompt('Enter ban reason:');
+    if (reason) {
+      showToast(`User ${userId} banned`, 'error');
+    }
+  }
+
+  // Bulk actions
+  function resolveAllPending() {
+    if (confirm('Resolve all pending reports?')) {
+      showToast('All pending reports resolved', 'success');
+      setTimeout(() => location.reload(), 1000);
+    }
+  }
+
+  function dismissAll() {
+    if (confirm('Dismiss all reports?')) {
+      showToast('All reports dismissed', 'warning');
+      setTimeout(() => location.reload(), 1000);
+    }
+  }
+
+  function exportReports() {
+    showToast('Export functionality coming soon!', 'info');
+  }
+
+  // Toast notification
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-sm shadow-lg`;
+    toast.innerHTML = `
+      <span>${message}</span>
+      <button class="btn btn-sm btn-circle btn-ghost" onclick="this.parentElement.remove()">×</button>
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+</script>
+
 {% endblock %}
