@@ -1,0 +1,1914 @@
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          type: string
+          enum: [student, faculty, cr, admin]
+        semester:
+          type: integer
+        avatar_url:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    Session:
+      type: object
+      properties:
+        token:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
+        user:
+          $ref: '#/components/schemas/User'
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        semester:
+          type: integer
+        credits:
+          type: integer
+        instructor_id:
+          type: integer
+
+    Enrollment:
+      type: object
+      properties:
+        id:
+          type: integer
+        course_id:
+          type: integer
+        user_id:
+          type: integer
+        role:
+          type: string
+        enrolled_at:
+          type: string
+          format: date-time
+
+    Assessment:
+      type: object
+      properties:
+        id: { type: integer }
+        course_id: { type: integer }
+        title: { type: string }
+        type: { type: string }
+        max_marks: { type: number }
+        weight: { type: number }
+        due_date: { type: string, format: date-time }
+
+    Assignment:
+      type: object
+      properties:
+        id: { type: integer }
+        course_id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        due_date: { type: string, format: date-time }
+        max_marks: { type: number }
+
+    Submission:
+      type: object
+      properties:
+        id: { type: integer }
+        assignment_id: { type: integer }
+        student_id: { type: integer }
+        submitted_at: { type: string, format: date-time }
+        file_url: { type: string }
+        content: { type: string }
+        marks: { type: number }
+        graded: { type: boolean }
+
+    Result:
+      type: object
+      properties:
+        id: { type: integer }
+        student_id: { type: integer }
+        semester: { type: integer }
+        sgpa: { type: number }
+        cgpa: { type: number }
+        details: { type: object } # subject -> { marks, credits, grade }
+
+    Resource:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        file_url: { type: string }
+        provider: { type: string }
+        visibility: { type: string }
+        semester: { type: integer }
+        subject: { type: string }
+        uploader_id: { type: integer }
+
+    Tag:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+
+    Announcement:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        content: { type: string }
+        posted_by: { type: integer }
+        posted_at: { type: string, format: date-time }
+        category: { type: string }
+        file_url: { type: string }
+        is_pinned: { type: boolean }
+        audience: { type: object }
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    Event:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        start_time: { type: string, format: date-time }
+        end_time: { type: string, format: date-time }
+        location: { type: string }
+        registration_link: { type: string }
+        capacity: { type: integer }
+        posted_by: { type: integer }
+        posted_at: { type: string, format: date-time }
+
+    Feedback:
+      type: object
+      properties:
+        id: { type: integer }
+        user_id: { type: integer, nullable: true }
+        is_anonymous: { type: boolean }
+        content: { type: string }
+        submitted_at: { type: string, format: date-time }
+        status: { type: string }
+        internal_notes: { type: string }
+
+    Post:
+      type: object
+      properties:
+        id: { type: integer }
+        author_id: { type: integer }
+        title: { type: string }
+        content: { type: string }
+        created_at: { type: string, format: date-time }
+        file_url: { type: string }
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    Comment:
+      type: object
+      properties:
+        id: { type: integer }
+        post_id: { type: integer }
+        author_id: { type: integer }
+        content: { type: string }
+        created_at: { type: string, format: date-time }
+
+    Like:
+      type: object
+      properties:
+        id: { type: integer }
+        user_id: { type: integer }
+        post_id: { type: integer }
+        created_at: { type: string, format: date-time }
+
+    Report:
+      type: object
+      properties:
+        id: { type: integer }
+        reporter_id: { type: integer }
+        post_id: { type: integer, nullable: true }
+        comment_id: { type: integer, nullable: true }
+        reason: { type: string }
+        is_resolved: { type: boolean }
+
+    Attendance:
+      type: object
+      properties:
+        id: { type: integer }
+        student_id: { type: integer }
+        date: { type: string, format: date }
+        status: { type: string, enum: [present, absent, late, excused] }
+        marked_by: { type: integer }
+        marked_at: { type: string, format: date-time }
+
+    TimetableEntry:
+      type: object
+      properties:
+        id: { type: integer }
+        course_id: { type: integer, nullable: true }
+        day: { type: string }
+        period: { type: string }
+        subject: { type: string }
+        start_time: { type: string, format: time }
+        end_time: { type: string, format: time }
+        location: { type: string }
+
+    Job:
+      type: object
+      properties:
+        id: { type: integer }
+        type: { type: string }
+        status: { type: string }
+        params: { type: object }
+        result: { type: object }
+        started_at: { type: string, format: date-time }
+        finished_at: { type: string, format: date-time }
+
+    AuditLog:
+      type: object
+      properties:
+        id: { type: integer }
+        actor_id: { type: integer }
+        action: { type: string }
+        target_type: { type: string }
+        target_id: { type: string }
+        meta: { type: object }
+        created_at: { type: string, format: date-time }
+
+  parameters:
+    pageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+    perPageParam:
+      name: per_page
+      in: query
+      schema:
+        type: integer
+        default: 20
+    idPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+
+security:
+  - bearerAuth: []
+
+paths:
+
+  # ---------------------------
+  # auth.py
+  # ---------------------------
+  /auth/register:
+    post:
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                username: { type: string }
+                email: { type: string }
+                password: { type: string }
+                role: { type: string }
+                semester: { type: integer }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags: [auth]
+      summary: Login and receive token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username_or_email: { type: string }
+                password: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        "401":
+          $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags: [auth]
+      summary: Logout (revoke token)
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: Logged out
+
+  /auth/forgot-password:
+    post:
+      tags: [auth]
+      summary: Start password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+      responses:
+        "200":
+          description: Reset email queued
+
+  /auth/reset-password:
+    post:
+      tags: [auth]
+      summary: Reset password using token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token: { type: string }
+                new_password: { type: string }
+      responses:
+        "200":
+          description: Password changed
+
+  /auth/sessions:
+    get:
+      tags: [auth]
+      summary: List active sessions for current user
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/perPageParam'
+      responses:
+        "200":
+          description: sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Session'
+
+  /auth/sessions/{id}/revoke:
+    post:
+      tags: [auth]
+      summary: Revoke a session
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: revoked
+
+  # ---------------------------
+  # admin.py
+  # ---------------------------
+  /admin/users:
+    get:
+      tags: [admin, users]
+      summary: List users
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/perPageParam'
+        - name: role
+          in: query
+          schema: { type: string }
+        - name: semester
+          in: query
+          schema: { type: integer }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: user list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      tags: [admin, users]
+      summary: Create user
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                username: { type: string }
+                email: { type: string }
+                password: { type: string }
+                role: { type: string }
+                semester: { type: integer }
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admin/users/{id}:
+    get:
+      tags: [admin, users]
+      summary: Get user details
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags: [admin, users]
+      summary: Update user
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      tags: [admin, users]
+      summary: Delete (soft/hard) user
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hard_delete:
+                  type: boolean
+      responses:
+        "204":
+          description: deleted
+
+  /admin/users/{id}/status:
+    patch:
+      tags: [admin, users]
+      summary: Change user status
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+      responses:
+        "200":
+          description: status changed
+
+  /admin/users/bulk-upload:
+    post:
+      tags: [admin, users]
+      summary: Bulk create users via CSV
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "202":
+          description: accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id: { type: string }
+
+  /admin/audit-logs:
+    get:
+      tags: [admin, audit]
+      summary: Query audit logs
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/perPageParam'
+        - name: actor_id
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AuditLog'
+
+  /admin/jobs:
+    get:
+      tags: [admin, jobs]
+      summary: List jobs
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/perPageParam'
+      responses:
+        "200":
+          description: jobs list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Job'
+
+  /admin/jobs/{id}:
+    get:
+      tags: [admin, jobs]
+      summary: Get job status/result
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+
+  /admin/settings:
+    post:
+      tags: [admin, settings]
+      summary: Create or update system setting
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                key: { type: string }
+                value: { type: object }
+                description: { type: string }
+      responses:
+        "200":
+          description: saved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Setting'
+
+  /admin/health:
+    get:
+      tags: [admin]
+      summary: Health check
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  db: { type: string }
+                  storage: { type: string }
+                  queue: { type: string }
+
+  # ---------------------------
+  # announcements.py
+  # ---------------------------
+  /announcements:
+    get:
+      tags: [announcements]
+      summary: List published announcements (audience-filtered)
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: '#/components/parameters/perPageParam'
+        - name: pinned_only
+          in: query
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announcement'
+
+    post:
+      tags: [announcements, admin]
+      summary: Create announcement (admin/teacher)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                content: { type: string }
+                audience: { type: object }
+                tags: { type: array, items: { type: string } }
+                start_at: { type: string, format: date-time }
+                end_at: { type: string, format: date-time }
+                notify: { type: boolean }
+                is_pinned: { type: boolean }
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+
+  /announcements/{id}:
+    get:
+      tags: [announcements]
+      summary: Get announcement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: announcement
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+
+    put:
+      tags: [announcements, admin]
+      summary: Update announcement
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200": { description: updated }
+
+    delete:
+      tags: [announcements, admin]
+      summary: Delete announcement
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: deleted }
+
+  /admin/announcements/{id}/pin:
+    post:
+      tags: [announcements, admin]
+      summary: Pin/unpin announcement
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pinned: { type: boolean }
+      responses:
+        "200": { description: pinned }
+
+  /admin/announcements/tags:
+    get:
+      tags: [announcements, admin]
+      summary: List tags
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+
+  # ---------------------------
+  # events.py
+  # ---------------------------
+  /events:
+    get:
+      tags: [events]
+      summary: List events
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - name: upcoming
+          in: query
+          schema: { type: boolean }
+      responses:
+        "200":
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+    post:
+      tags: [events, admin]
+      security: [{ bearerAuth: [] }]
+      summary: Create event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                description: { type: string }
+                start_time: { type: string, format: date-time }
+                end_time: { type: string, format: date-time }
+                location: { type: string }
+                capacity: { type: integer }
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+  /events/{id}:
+    get:
+      tags: [events]
+      summary: Get event details and RSVP status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+    put:
+      tags: [events, admin]
+      security: [{ bearerAuth: [] }]
+      summary: Update event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200": { description: updated }
+
+    delete:
+      tags: [events, admin]
+      security: [{ bearerAuth: [] }]
+      summary: Delete/cancel event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: deleted }
+
+  /events/{id}/rsvp:
+    post:
+      tags: [events]
+      summary: RSVP or withdraw for event
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [register, withdraw]
+      responses:
+        "200": { description: rsvp updated }
+        "400": { $ref: '#/components/schemas/Error' }
+
+  /admin/events/{id}/attendees:
+    get:
+      tags: [events, admin]
+      summary: List attendees
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: attendees list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /admin/events/{id}/export-attendees:
+    post:
+      tags: [events, admin, jobs]
+      summary: Export attendees (background)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "202":
+          description: job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id: { type: string }
+
+  # ---------------------------
+  # resources.py
+  # ---------------------------
+  /resources:
+    get:
+      tags: [resources]
+      summary: List resources
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - name: semester
+          in: query
+          schema: { type: integer }
+        - name: subject
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resource'
+
+    post:
+      tags: [resources, admin]
+      summary: Upload resource
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                title: { type: string }
+                description: { type: string }
+                visibility: { type: string }
+                semester: { type: integer }
+                subject: { type: string }
+      responses:
+        "201":
+          description: resource created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+
+  /resources/{id}:
+    get:
+      tags: [resources]
+      summary: Get resource metadata and secure link
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+
+    put:
+      tags: [resources, admin]
+      security: [{ bearerAuth: [] }]
+      summary: Update resource
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200": { description: updated }
+
+    delete:
+      tags: [resources, admin]
+      security: [{ bearerAuth: [] }]
+      summary: Delete resource (soft)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: deleted }
+
+  /resources/bulk-upload:
+    post:
+      tags: [resources, admin, jobs]
+      summary: Bulk upload resources (zip + metadata)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        "202":
+          description: job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id: { type: string }
+
+  # ---------------------------
+  # feed.py
+  # ---------------------------
+  /feed/posts:
+    get:
+      tags: [feed]
+      summary: List posts
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - name: tag
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+    post:
+      tags: [feed]
+      summary: Create post
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                content: { type: string }
+                tags: { type: array, items: { type: string } }
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+  /feed/posts/{id}:
+    get:
+      tags: [feed]
+      summary: Get post detail with comments
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+
+    put:
+      tags: [feed]
+      summary: Edit own post
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200": { description: updated }
+
+    delete:
+      tags: [feed]
+      summary: Delete own post
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: deleted }
+
+  /feed/posts/{id}/like:
+    post:
+      tags: [feed]
+      summary: Like/unlike a post
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [like, unlike]
+      responses:
+        "200": { description: ok }
+
+  /feed/posts/{id}/comments:
+    post:
+      tags: [feed]
+      summary: Add comment
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content: { type: string }
+                reply_to_comment_id: { type: integer }
+      responses:
+        "201":
+          description: comment created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+
+  /feed/comments/{id}:
+    delete:
+      tags: [feed]
+      summary: Delete comment
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204": { description: deleted }
+
+  /feed/reports:
+    post:
+      tags: [feed, moderation]
+      summary: Report post or comment
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                post_id: { type: integer }
+                comment_id: { type: integer }
+                reason: { type: string }
+      responses:
+        "201":
+          description: report created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+
+  # ---------------------------
+  # student.py
+  # ---------------------------
+  /student/profile:
+    get:
+      tags: [student]
+      summary: Get current student's profile and quick stats
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags: [student]
+      summary: Update student's profile
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200": { description: updated }
+
+  /student/change-password:
+    post:
+      tags: [student]
+      summary: Change own password
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password: { type: string }
+                new_password: { type: string }
+      responses:
+        "200": { description: changed }
+
+  /student/results:
+    get:
+      tags: [student]
+      summary: List student's results
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+        - name: semester
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Result'
+
+  /student/results/{semester}:
+    get:
+      tags: [student]
+      summary: Get semester result
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: semester
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+
+  /student/export/transcript:
+    post:
+      tags: [student, jobs]
+      summary: Export transcript (background)
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                format: { type: string, enum: [pdf, csv] }
+      responses:
+        "202":
+          description: job created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id: { type: string }
+
+  /student/resources:
+    get:
+      tags: [student, resources]
+      summary: Browse resources available to student
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        "200":
+          description: resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Resource'
+
+  /student/resources/{id}/favorite:
+    post:
+      tags: [student, resources]
+      summary: Add/remove favorite
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [add, remove]
+      responses:
+        "200": { description: ok }
+
+  /student/announcements:
+    get:
+      tags: [student, announcements]
+      summary: Student announcements (audience filtered)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        "200":
+          description: list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announcement'
+
+  /student/events:
+    get:
+      tags: [student, events]
+      summary: List events relevant to student
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+
+  /student/events/{id}/register:
+    post:
+      tags: [student, events]
+      summary: Register for an event (alias to /events/{id}/rsvp)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action: { type: string, enum: [register, withdraw] }
+      responses:
+        "200": { description: ok }
+
+  /student/timetable:
+    get:
+      tags: [student, timetable]
+      summary: Get student's published timetable
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: timetable
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimetableEntry'
+
+  /student/attendance/excuse:
+    post:
+      tags: [student, attendance]
+      summary: Submit excuse for missed session
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                session_id: { type: integer }
+                reason: { type: string }
+                attachment: { type: string, format: binary }
+      responses:
+        "201":
+          description: excuse submitted
+
+  /student/feedback:
+    post:
+      tags: [student, feedback]
+      summary: Submit feedback/complaint
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                category: { type: string }
+                content: { type: string }
+                anonymous: { type: boolean }
+      responses:
+        "201":
+          description: feedback created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+
+  # ---------------------------
+  # teacher.py / faculty.py
+  # ---------------------------
+  /teacher/profile:
+    get:
+      tags: [teacher]
+      summary: Get teacher profile and assigned courses
+      security: [{ bearerAuth: [] }]
+      responses:
+        "200":
+          description: profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    put:
+      tags: [teacher]
+      summary: Update teacher profile
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200": { description: updated }
+
+  /teacher/courses:
+    get:
+      tags: [teacher, courses]
+      summary: List courses teacher instructs
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        "200":
+          description: courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+
+  /teacher/course/{course_id}:
+    get:
+      tags: [teacher, courses]
+      summary: Course details (roster, resources, gradebook)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: course detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+
+  /teacher/course/{course_id}/assessments:
+    post:
+      tags: [teacher, assessments]
+      summary: Create assessment for course
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+
+  /teacher/course/{course_id}/assessments/{assessment_id}/scores:
+    post:
+      tags: [teacher, assessments]
+      summary: Submit scores (bulk or single)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: assessment_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scores:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      student_id: { type: integer }
+                      marks: { type: number }
+                      remarks: { type: string }
+      responses:
+        "200":
+          description: scores processed
+        "202":
+          description: background job started (CSV bulk)
+
+  /teacher/course/{course_id}/assignments:
+    post:
+      tags: [teacher, assignments]
+      summary: Create assignment
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+      responses:
+        "201": { description: created }
+
+  /teacher/course/{course_id}/assignments/{assignment_id}/submissions:
+    get:
+      tags: [teacher, assignments]
+      summary: List submissions
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: assignment_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: submissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Submission'
+
+  /teacher/course/{course_id}/assignments/{assignment_id}/submissions/{submission_id}/grade:
+    post:
+      tags: [teacher, assignments]
+      summary: Grade submission
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: assignment_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: submission_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                marks: { type: number }
+                feedback: { type: string }
+      responses:
+        "200": { description: graded }
+
+  /teacher/course/{course_id}/attendance:
+    get:
+      tags: [teacher, attendance]
+      summary: Attendance summary for course
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: attendance summary }
+
+  /teacher/course/{course_id}/attendance/sessions:
+    post:
+      tags: [teacher, attendance]
+      summary: Create attendance session
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date: { type: string, format: date }
+                start_time: { type: string }
+                end_time: { type: string }
+      responses:
+        "201": { description: session created }
+
+  /teacher/course/{course_id}/attendance/sessions/{session_id}/mark:
+    post:
+      tags: [teacher, attendance]
+      summary: Mark attendance (bulk)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: session_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                records:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      student_id: { type: integer }
+                      status:
+                        type: string
+                        enum: [present, absent, late, excused]
+                      note: { type: string }
+      responses:
+        "200": { description: recorded }
+
+  /teacher/course/{course_id}/resources:
+    post:
+      tags: [teacher, resources]
+      summary: Upload resource to course
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+                title: { type: string }
+      responses:
+        "201": { description: created }
+
+  /teacher/announcements:
+    post:
+      tags: [teacher, announcements]
+      summary: Create course-level announcement
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "201": { description: created }
+
+  /teacher/feedback:
+    get:
+      tags: [teacher, feedback]
+      summary: List course-related feedback
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        "200":
+          description: feedback list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feedback'
+
+  /teacher/reports/course-performance:
+    get:
+      tags: [teacher, reports]
+      summary: Course performance analytics
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: course_id
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: analytics payload
+          content:
+            application/json:
+              schema:
+                type: object
+
+  # ---------------------------
+  # jobs generic endpoints
+  # ---------------------------
+  /jobs/{id}:
+    get:
+      tags: [jobs]
+      summary: Get job status/result
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: job
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+
+    post:
+      tags: [jobs]
+      summary: Retry or cancel job (depending on action in body)
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: [retry, cancel]
+      responses:
+        "202":
+          description: job action accepted
+
+  # catch-all: health
+  /health:
+    get:
+      tags: [health]
+      summary: System health (public)
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }

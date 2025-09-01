@@ -43,8 +43,10 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         email = request.form["email"]
+        
         password = request.form["password"]
         role = request.form["role"]
+
         name = request.form.get("name", username)
         existing_user = User.query.filter_by(username=username).first()
 
@@ -57,7 +59,9 @@ def register():
         if existing_email:
             flash("Email Already Exists", "error")
             return render_template("auth/register.html")
+        
         hashed_password = generate_password_hash(password)
+        
         new_user = User(
             username=username,
             name=name,
@@ -65,9 +69,11 @@ def register():
             password_hash=hashed_password,
             role=role,
         )
+        
         db.session.add(new_user)
         db.session.commit()
         flash("Registration Successful! Please Login.", "success")
+        
         return redirect(url_for("auth.login"))
     return render_template("auth/register.html")
 
@@ -76,5 +82,6 @@ def register():
 @login_required
 def logout():
     logout_user()
+    
     flash("You Have Been Logged Out", "info")
     return redirect(url_for("auth.login"))
