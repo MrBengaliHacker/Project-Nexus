@@ -1,403 +1,114 @@
-{% extends "base.html" %}
+{% extends 'base.html' %} {% block title %}New Post{% endblock %} {% block content %}
+<div class="max-w-3xl mx-auto">
+	<div class="card bg-base-100 shadow">
+		<div class="card-body">
+			<div class="flex items-center justify-between gap-3">
+				<h1 class="card-title">Create a New Post</h1>
+				<a href="{{ url_for('feed.feed') }}" class="btn btn-ghost btn-sm">Back</a>
+			</div>
 
-{% block title %}Create New Post - KampusConnect{% endblock %}
+			<form action="{{ url_for('feed.new_post') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+				<div class="grid grid-cols-1 gap-4">
+					<div class="form-control">
+						<label class="label"><span class="label-text">Title</span></label>
+						<input type="text" name="title" class="input input-bordered" placeholder="What’s on your mind?" required />
+					</div>
 
-{% block content %}
-<div class="min-h-screen bg-base-100">
-  <!-- Navigation -->
-  <div class="navbar bg-base-100/95 backdrop-blur-xl sticky top-0 z-50 shadow-lg border-b border-base-300">
-    <div class="navbar-start">
-      <div class="btn btn-ghost" onclick="window.history.back()">
-        <i class="fas fa-arrow-left mr-2"></i>
-        Back to Feed
-      </div>
-    </div>
-    <div class="navbar-center">
-      <h1 class="text-xl font-bold">Create New Post</h1>
-    </div>
-    <div class="navbar-end">
-      <!-- Theme Toggle -->
-      <label class="swap swap-rotate btn btn-ghost btn-circle">
-        <input type="checkbox" class="theme-controller" value="dark" onchange="toggleTheme()" />
-        <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-        </svg>
-        <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-        </svg>
-      </label>
-    </div>
-  </div>
+					<div class="form-control">
+						<label class="label"><span class="label-text">Content</span><span class="label-text-alt" id="charCount">0/1000</span></label>
+						<textarea name="content" id="content" maxlength="1000" class="textarea textarea-bordered h-48" placeholder="Share an update, ask a question, or post a notice..." required></textarea>
+					</div>
 
-  <!-- Main Content -->
-  <div class="container mx-auto px-4 py-8 max-w-4xl">
-    <!-- Post Creation Form -->
-    <div class="bg-base-100 rounded-2xl shadow-xl p-8 border border-base-300">
-      <!-- Author Info -->
-      <div class="flex items-center gap-4 mb-8">
-        <div class="avatar">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-            <span class="text-white font-bold text-lg">{{ current_user.name[0] if current_user.name else 'U' }}</span>
-          </div>
-        </div>
-        <div>
-          <h2 class="text-lg font-semibold">{{ current_user.name }}</h2>
-          <p class="text-sm text-base-content/60">Sharing with the campus community</p>
-        </div>
-      </div>
+					{% if tags %}
+					<div class="form-control">
+						<label class="label"><span class="label-text">Tags</span><span class="label-text-alt">Select up to 5</span></label>
+						<div class="flex flex-wrap gap-2">
+							{% for t in tags %}
+							<label class="badge badge-ghost cursor-pointer gap-2 py-3">
+								<input type="checkbox" name="tags" value="{{ t.id }}" class="checkbox checkbox-xs" onclick="limitTags(this, 5)" />
+								#{{ t.name }}
+							</label>
+							{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					<div class="form-control">
+						<label class="label"><span class="label-text">Tags (comma separated)</span></label>
+						<input type="text" name="tags" placeholder="e.g., campus, event, notice" class="input input-bordered" />
+					</div>
+					{% endif %}
 
-      <form method="post" enctype="multipart/form-data" class="space-y-6">
-        <!-- Title Input -->
-        <div>
-          <label for="title" class="block text-sm font-semibold text-base-content mb-2">
-            Post Title <span class="text-error">*</span>
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            required
-            maxlength="200"
-            class="input input-bordered w-full rounded-xl focus:input-primary transition-all duration-300"
-            placeholder="What's your post about?"
-          />
-          <div class="text-xs text-base-content/50 mt-1">
-            <span id="title-count">0</span>/200 characters
-          </div>
-        </div>
+					<div class="form-control">
+						<label class="label"><span class="label-text">Attachment (optional)</span><span class="label-text-alt">Images/PDF up to 10MB</span></label>
+						<input type="file" name="file" id="fileInput" class="file-input file-input-bordered w-full" accept="image/*,.pdf,.docx" />
+						<div id="filePreview" class="mt-3 hidden">
+							<img id="previewImg" class="max-h-56 rounded-lg shadow" alt="preview" />
+							<p id="previewName" class="text-sm text-base-content/60 mt-2"></p>
+						</div>
+					</div>
+				</div>
 
-        <!-- Content Input -->
-        <div>
-          <label for="content" class="block text-sm font-semibold text-base-content mb-2">
-            Content <span class="text-error">*</span>
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            required
-            rows="6"
-            maxlength="2000"
-            class="textarea textarea-bordered w-full rounded-xl focus:textarea-primary transition-all duration-300 resize-none"
-            placeholder="Share your thoughts, ideas, or experiences with the campus community..."
-          ></textarea>
-          <div class="text-xs text-base-content/50 mt-1">
-            <span id="content-count">0</span>/2000 characters
-          </div>
-        </div>
-
-        <!-- Tags Selection -->
-        <div>
-          <label class="block text-sm font-semibold text-base-content mb-2">
-            Tags (Optional)
-          </label>
-          <p class="text-xs text-base-content/60 mb-3">Select relevant tags to help others find your post</p>
-          <div class="flex flex-wrap gap-2" id="tags-container">
-            {% for tag in tags %}
-            <label class="cursor-pointer">
-              <input type="checkbox" name="tags" value="{{ tag.id }}" class="hidden peer" />
-              <span class="badge badge-outline hover:badge-primary peer-checked:badge-primary peer-checked:text-white transition-all duration-300 px-3 py-2">
-                #{{ tag.name }}
-              </span>
-            </label>
-            {% endfor %}
-          </div>
-          <div class="mt-3">
-            <input
-              type="text"
-              id="new-tag"
-              class="input input-bordered input-sm rounded-lg focus:input-primary transition-all duration-300"
-              placeholder="Add new tag..."
-              maxlength="30"
-            />
-            <button type="button" onclick="addNewTag()" class="btn btn-primary btn-sm ml-2">
-              <i class="fas fa-plus mr-1"></i>
-              Add
-            </button>
-          </div>
-        </div>
-
-        <!-- File Attachment -->
-        <div>
-          <label class="block text-sm font-semibold text-base-content mb-2">
-            Attachment (Optional)
-          </label>
-          <p class="text-xs text-base-content/60 mb-3">Upload images, documents, or other files (max 10MB)</p>
-          <div class="border-2 border-dashed border-base-300 rounded-xl p-6 text-center hover:border-primary transition-colors duration-300" id="drop-zone">
-            <div class="space-y-4">
-              <div class="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto">
-                <i class="fas fa-cloud-upload-alt text-2xl text-base-content/50"></i>
-              </div>
-              <div>
-                <p class="font-medium">Drag & drop files here or click to browse</p>
-                <p class="text-sm text-base-content/50">Supported formats: PDF, DOC, DOCX, JPG, PNG, GIF</p>
-              </div>
-              <input
-                type="file"
-                id="file-input"
-                name="file"
-                class="hidden"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif"
-                onchange="handleFileSelect(this)"
-              />
-              <button type="button" onclick="document.getElementById('file-input').click()" class="btn btn-primary btn-outline">
-                <i class="fas fa-folder-open mr-2"></i>
-                Choose File
-              </button>
-            </div>
-          </div>
-          <div id="file-preview" class="mt-4 hidden">
-            <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg">
-              <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
-                <i class="fas fa-file text-primary"></i>
-              </div>
-              <div class="flex-1">
-                <p class="font-medium text-sm" id="file-name"></p>
-                <p class="text-xs text-base-content/60" id="file-size"></p>
-              </div>
-              <button type="button" onclick="removeFile()" class="btn btn-ghost btn-sm text-error">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Preview Toggle -->
-        <div class="flex items-center justify-between p-4 bg-base-200 rounded-xl">
-          <div>
-            <h4 class="font-semibold">Preview</h4>
-            <p class="text-sm text-base-content/60">See how your post will look before publishing</p>
-          </div>
-          <input type="checkbox" id="preview-toggle" class="toggle toggle-primary" onchange="togglePreview()" />
-        </div>
-
-        <!-- Post Preview -->
-        <div id="post-preview" class="hidden border border-base-300 rounded-xl p-6 bg-base-50">
-          <h3 class="text-lg font-bold mb-3" id="preview-title"></h3>
-          <p class="text-base-content/80 leading-relaxed mb-4" id="preview-content"></p>
-          <div id="preview-tags" class="flex flex-wrap gap-2"></div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-base-300">
-          <button type="submit" class="btn btn-primary flex-1 btn-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-            <i class="fas fa-paper-plane mr-2"></i>
-            Publish Post
-          </button>
-          <button type="button" onclick="saveDraft()" class="btn btn-outline btn-lg rounded-xl">
-            <i class="fas fa-save mr-2"></i>
-            Save Draft
-          </button>
-          <a href="{{ url_for('feed.feed') }}" class="btn btn-ghost btn-lg rounded-xl">
-            <i class="fas fa-times mr-2"></i>
-            Cancel
-          </a>
-        </div>
-      </form>
-    </div>
-
-    <!-- Tips Section -->
-    <div class="bg-gradient-to-r from-info/10 via-info/5 to-info/10 rounded-2xl p-6 mt-8 border border-info/20">
-      <h3 class="text-lg font-bold mb-4 flex items-center">
-        <i class="fas fa-lightbulb text-info mr-2"></i>
-        Posting Tips
-      </h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div class="space-y-2">
-          <p><i class="fas fa-check text-success mr-2"></i> Use clear, descriptive titles</p>
-          <p><i class="fas fa-check text-success mr-2"></i> Add relevant tags for better visibility</p>
-          <p><i class="fas fa-check text-success mr-2"></i> Keep content engaging and respectful</p>
-        </div>
-        <div class="space-y-2">
-          <p><i class="fas fa-check text-success mr-2"></i> Use attachments to support your content</p>
-          <p><i class="fas fa-check text-success mr-2"></i> Preview before posting</p>
-          <p><i class="fas fa-check text-success mr-2"></i> Follow community guidelines</p>
-        </div>
-      </div>
-    </div>
-  </div>
+				<div class="flex items-center gap-2">
+					<button type="submit" class="btn btn-primary">Publish</button>
+					<a href="{{ url_for('feed.feed') }}" class="btn">Cancel</a>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>
-
+{% endblock %} {% block scripts %}
 <script>
-  // Theme toggle functionality
-  function toggleTheme() {
-    const html = document.documentElement;
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-  }
+	const contentEl = document.getElementById("content");
+	const charCountEl = document.getElementById("charCount");
+	if (contentEl && charCountEl) {
+		const updateCount = () => (charCountEl.textContent = `${contentEl.value.length}/1000`);
+		contentEl.addEventListener("input", updateCount);
+		updateCount();
+	}
 
-  // Load saved theme
-  document.addEventListener('DOMContentLoaded', function () {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    const themeController = document.querySelector('.theme-controller');
-    if (themeController) {
-      themeController.checked = savedTheme === 'dark';
-    }
+	function limitTags(cb, limit) {
+		const checked = document.querySelectorAll('input[name="tags"]:checked');
+		if (checked.length > limit) {
+			cb.checked = false;
+			const toast = document.createElement("div");
+			toast.className = "toast toast-top toast-center";
+			toast.innerHTML = '<div class="alert alert-warning"><span>Maximum tag limit reached.</span></div>';
+			document.body.appendChild(toast);
+			setTimeout(() => toast.remove(), 1500);
+		}
+	}
 
-    // Initialize character counters
-    updateTitleCount();
-    updateContentCount();
-  });
-
-  // Character counters
-  document.getElementById('title').addEventListener('input', updateTitleCount);
-  document.getElementById('content').addEventListener('input', updateContentCount);
-
-  function updateTitleCount() {
-    const title = document.getElementById('title').value;
-    document.getElementById('title-count').textContent = title.length;
-  }
-
-  function updateContentCount() {
-    const content = document.getElementById('content').value;
-    document.getElementById('content-count').textContent = content.length;
-  }
-
-  // Add new tag functionality
-  function addNewTag() {
-    const newTagInput = document.getElementById('new-tag');
-    const tagName = newTagInput.value.trim();
-
-    if (tagName) {
-      const tagsContainer = document.getElementById('tags-container');
-      const tagElement = document.createElement('label');
-      tagElement.className = 'cursor-pointer';
-      tagElement.innerHTML = `
-        <input type="checkbox" name="custom_tags" value="${tagName}" class="hidden peer" checked />
-        <span class="badge badge-outline badge-primary peer-checked:badge-primary peer-checked:text-white transition-all duration-300 px-3 py-2">
-          #${tagName}
-        </span>
-      `;
-      tagsContainer.appendChild(tagElement);
-      newTagInput.value = '';
-      showToast('Tag added successfully!', 'success');
-    }
-  }
-
-  // File handling
-  function handleFileSelect(input) {
-    const file = input.files[0];
-    if (file) {
-      const fileName = file.name;
-      const fileSize = (file.size / 1024 / 1024).toFixed(2) + ' MB';
-
-      document.getElementById('file-name').textContent = fileName;
-      document.getElementById('file-size').textContent = fileSize;
-      document.getElementById('file-preview').classList.remove('hidden');
-
-      // Update drop zone appearance
-      const dropZone = document.getElementById('drop-zone');
-      dropZone.classList.add('border-success');
-      dropZone.classList.remove('border-primary');
-    }
-  }
-
-  function removeFile() {
-    document.getElementById('file-input').value = '';
-    document.getElementById('file-preview').classList.add('hidden');
-
-    const dropZone = document.getElementById('drop-zone');
-    dropZone.classList.remove('border-success');
-    dropZone.classList.add('border-primary');
-  }
-
-  // Drag and drop functionality
-  const dropZone = document.getElementById('drop-zone');
-  dropZone.addEventListener('dragover', function(e) {
-    e.preventDefault();
-    this.classList.add('border-primary');
-  });
-
-  dropZone.addEventListener('dragleave', function(e) {
-    e.preventDefault();
-    this.classList.remove('border-primary');
-  });
-
-  dropZone.addEventListener('drop', function(e) {
-    e.preventDefault();
-    this.classList.remove('border-primary');
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      document.getElementById('file-input').files = files;
-      handleFileSelect(document.getElementById('file-input'));
-    }
-  });
-
-  // Preview functionality
-  function togglePreview() {
-    const isChecked = document.getElementById('preview-toggle').checked;
-    const previewDiv = document.getElementById('post-preview');
-
-    if (isChecked) {
-      updatePreview();
-      previewDiv.classList.remove('hidden');
-    } else {
-      previewDiv.classList.add('hidden');
-    }
-  }
-
-  function updatePreview() {
-    const title = document.getElementById('title').value;
-    const content = document.getElementById('content').value;
-
-    document.getElementById('preview-title').textContent = title || 'Untitled Post';
-    document.getElementById('preview-content').textContent = content || 'No content yet...';
-
-    // Update preview tags
-    const selectedTags = document.querySelectorAll('input[name="tags"]:checked, input[name="custom_tags"]:checked');
-    const previewTags = document.getElementById('preview-tags');
-    previewTags.innerHTML = '';
-
-    selectedTags.forEach(tagInput => {
-      const tagName = tagInput.value;
-      const tagElement = document.createElement('span');
-      tagElement.className = 'badge badge-primary badge-outline';
-      tagElement.textContent = '#' + tagName;
-      previewTags.appendChild(tagElement);
-    });
-  }
-
-  // Auto-update preview
-  document.getElementById('title').addEventListener('input', function() {
-    if (document.getElementById('preview-toggle').checked) {
-      updatePreview();
-    }
-  });
-
-  document.getElementById('content').addEventListener('input', function() {
-    if (document.getElementById('preview-toggle').checked) {
-      updatePreview();
-    }
-  });
-
-  // Save draft functionality
-  function saveDraft() {
-    // This would need backend implementation
-    showToast('Draft saved successfully!', 'success');
-  }
-
-  // Toast notification
-  function showToast(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-sm shadow-lg`;
-    toast.innerHTML = `
-      <span>${message}</span>
-      <button class="btn btn-sm btn-circle btn-ghost" onclick="this.parentElement.remove()">×</button>
-    `;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-  }
-
-  // Enter key to add tag
-  document.getElementById('new-tag').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addNewTag();
-    }
-  });
+	const fileInput = document.getElementById("fileInput");
+	const previewWrap = document.getElementById("filePreview");
+	const previewImg = document.getElementById("previewImg");
+	const previewName = document.getElementById("previewName");
+	if (fileInput) {
+		fileInput.addEventListener("change", () => {
+			const file = fileInput.files[0];
+			if (!file) {
+				previewWrap.classList.add("hidden");
+				return;
+			}
+			if (file.size > 10 * 1024 * 1024) {
+				// 10MB
+				alert("File too large. Max 10MB.");
+				fileInput.value = "";
+				previewWrap.classList.add("hidden");
+				return;
+			}
+			previewName.textContent = file.name + ` (${Math.round(file.size / 1024)} KB)`;
+			if (file.type.startsWith("image/")) {
+				const reader = new FileReader();
+				reader.onload = (e) => {
+					previewImg.src = e.target.result;
+					previewWrap.classList.remove("hidden");
+				};
+				reader.readAsDataURL(file);
+			} else {
+				previewImg.src = "";
+				previewWrap.classList.add("hidden");
+			}
+		});
+	}
 </script>
-
 {% endblock %}

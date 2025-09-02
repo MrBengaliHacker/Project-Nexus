@@ -1,47 +1,79 @@
-{% extends "base.html" %}
-{% block title %}Announcements{% endblock %}
-{% block content %}
-<div class="max-w-3xl mx-auto p-4">
-  <h1 class="text-2xl font-bold mb-4">Announcements</h1>
-  <form method="get" class="mb-4 flex gap-2">
-    <input type="text" name="category" placeholder="Category" class="border rounded px-2 py-1" value="{{ request.args.get('category', '') }}">
-    <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Filter</button>
-    {% if current_user.role in ['faculty', 'admin', 'cr'] %}
-      <a href="{{ url_for('announcements.announcement_create') }}" class="bg-green-500 text-white px-3 py-1 rounded ml-2">Post Announcement</a>
-    {% endif %}
-  </form>
-  {% for announcement in announcements %}
-    <div class="border rounded p-4 mb-4 {% if announcement.is_pinned %}bg-yellow-100{% endif %}">
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-semibold">{{ announcement.title }}</h2>
-        {% if announcement.is_pinned %}<span class="text-yellow-700 font-bold">Pinned</span>{% endif %}
-      </div>
-      <p class="mt-2">{{ announcement.content }}</p>
-      {% if announcement.file_url %}
-        <a href="{{ announcement.file_url }}" class="text-blue-600 underline" target="_blank">Attachment</a>
-      {% endif %}
-      <div class="text-sm text-gray-600 mt-2">
-        Posted by: {{ announcement.poster.name }} ({{ announcement.poster.role }}) on {{ announcement.posted_at.strftime('%Y-%m-%d %H:%M') }}
-        {% if current_user.id == announcement.posted_by and current_user.role in ['faculty', 'admin', 'cr'] %}
-          <a href="{{ url_for('announcements.announcement_edit', announcement_id=announcement.id) }}" class="ml-2 text-blue-500">Edit</a>
-          <form method="POST" action="{{ url_for('announcements.announcement_delete', announcement_id=announcement.id) }}" style="display:inline;">
-            <button type="submit" class="ml-2 text-red-500" onclick="return confirm('Delete this announcement?')">Delete</button>
-          </form>
-        {% endif %}
-      </div>
-      {% if announcement.category %}
-        <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded mt-2">{{ announcement.category }}</span>
-      {% endif %}
-      {% if announcement.tags %}
-        <div class="mt-2">
-          {% for tag in announcement.tags %}
-            <span class="inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded mr-1">#{{ tag.name }}</span>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-  {% else %}
-    <p>No announcements found.</p>
-  {% endfor %}
+{% extends 'base.html' %} {% block title %}Announcements{% endblock %} {% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+	<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+		<h1 class="text-2xl font-semibold">Announcements</h1>
+		<div class="flex gap-2">
+			<input id="annSearch" type="text" placeholder="Search announcements..." class="input input-bordered input-sm w-full sm:w-64" oninput="filterAnnouncements()" />
+			{% if current_user.is_authenticated and current_user.role in ['teacher','admin','cr'] %}
+			<a class="btn btn-sm btn-primary" href="{{ url_for('announcements.announcement_create') }}"><i class="fa-solid fa-plus mr-2"></i>New</a>
+			{% endif %}
+		</div>
+	</div>
+
+	{% if announcements %}
+	<div id="annList" class="grid gap-4">
+		{% for a in announcements %}
+		<article class="card bg-base-100 shadow nx-card" data-title="{{ a.title|lower }}" data-content="{{ a.content|lower }}">
+			<div class="card-body">
+				<div class="flex items-start justify-between gap-3">
+					<div class="min-w-0">
+						<div class="flex items-center gap-2 flex-wrap">
+							<h2 class="card-title break-words">{{ a.title }}</h2>
+							{% if a.is_pinned %}
+							<span class="badge badge-warning">Pinned</span>
+							{% endif %} {% if a.category %}
+							<span class="badge badge-outline">{{ a.category }}</span>
+							{% endif %}
+						</div>
+						<p class="text-sm text-base-content/60 mt-1">by {{ a.poster.name }} • {{ a.posted_at.strftime('%b %d, %Y') }}</p>
+					</div>
+					{% if current_user.is_authenticated and current_user.id == a.posted_by and current_user.role in ['teacher','admin','cr'] %}
+					<div class="flex gap-2">
+						<a class="btn btn-ghost btn-xs" href="{{ url_for('announcements.announcement_edit', announcement_id=a.id) }}">Edit</a>
+						<form method="post" action="{{ url_for('announcements.announcement_delete', announcement_id=a.id) }}" onsubmit="return confirm('Delete this announcement?');">
+							<button type="submit" class="btn btn-ghost btn-xs text-error">Delete</button>
+						</form>
+					</div>
+					{% endif %}
+				</div>
+
+				<p class="text-sm text-base-content/70 mt-3">{{ a.content[:240] }}{% if a.content|length > 240 %}...{% endif %}</p>
+
+				<div class="flex flex-wrap items-center gap-2 mt-3">
+					{% for t in a.tags %}
+					<span class="badge badge-sm">#{{ t.name }}</span>
+					{% endfor %} {% if a.file_url %}
+					<a class="btn btn-xs btn-outline ml-auto" href="{{ a.file_url }}" target="_blank" rel="noopener">Attachment</a>
+					{% endif %}
+				</div>
+
+				{% if a.content and a.content|length > 240 %}
+				<details class="mt-2">
+					<summary class="link link-hover cursor-pointer">Read more</summary>
+					<div class="prose max-w-none mt-2 text-sm">{{ a.content }}</div>
+				</details>
+				{% endif %}
+			</div>
+		</article>
+		{% endfor %}
+	</div>
+	{% else %}
+	<div class="card bg-base-100 shadow nx-card">
+		<div class="card-body text-center text-base-content/70">No announcements found.</div>
+	</div>
+	{% endif %}
 </div>
+
+{% endblock %} {% block scripts %}
+<script>
+	function filterAnnouncements() {
+		const q = (document.getElementById("annSearch").value || "").toLowerCase();
+		const items = document.querySelectorAll("#annList article");
+		items.forEach((el) => {
+			const t = el.getAttribute("data-title") || "";
+			const c = el.getAttribute("data-content") || "";
+			el.classList.toggle("hidden", !(t.includes(q) || c.includes(q)));
+		});
+	}
+</script>
 {% endblock %}

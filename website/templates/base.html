@@ -1,116 +1,124 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{% block title %}Project Nexus{% endblock %}</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}KampusConnect{% endblock %}</title>
+		<!-- Tailwind (CDN) + DaisyUI (compiled CSS) + FontAwesome -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+		<style>
+			/* Typography */
+			:root {
+				--nexus-radius: 16px;
+			}
+			body {
+				font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+			}
 
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="KampusConnect - One platform for all your campus needs. Connect, learn, and grow with our smart campus solution.">
-  <meta name="keywords" content="college, campus, education, technology, smart campus, student portal">
-  <meta name="author" content="KampusConnect Team">
+			/* Subtle light background with soft gradient blobs */
+			body::before {
+				content: "";
+				position: fixed;
+				inset: 0;
+				pointer-events: none;
+				background: radial-gradient(1200px 600px at 10% -10%, hsl(var(--p) / 0.08), transparent 40%), radial-gradient(900px 600px at 110% 10%, hsl(var(--s) / 0.08), transparent 35%), linear-gradient(180deg, hsl(var(--b2)) 0%, hsl(var(--b1)) 100%);
+				z-index: 0;
+			}
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+			/* Cards utility (for places not using DaisyUI card component) */
+			.nx-card {
+				background: hsl(var(--b1));
+				border: 1px solid hsl(var(--b3) / 0.6);
+				border-radius: var(--nexus-radius);
+				box-shadow: 0 8px 24px rgba(2, 8, 20, 0.06);
+			}
 
-  <!-- DaisyUI + Tailwind -->
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.0/dist/full.css" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
+			/* Small accessibility helper retained */
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border: 0;
+			}
+		</style>
 
-  <!-- FontAwesome -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+		{% block extra_head %}{% endblock %}
+	</head>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<body class="min-h-screen bg-base-200 text-base-content relative">
+		<!-- Skip to main content for accessibility -->
+		<a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-lg z-50"> Skip to main content </a>
 
-  <!-- Custom Styles -->
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
+		<header class="w-full bg-white/70 backdrop-blur sticky top-0 z-50 border-b border-base-300">
+			<div class="max-w-6xl mx-auto px-4">{% include 'navbar.html' %}</div>
+		</header>
 
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
+		{% block page_header %}{% endblock %}
 
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-    }
+		<main id="main-content" class="relative z-[1] max-w-6xl mx-auto px-4 py-8 space-y-8">
+			{% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+			<div class="space-y-2">
+				{% for category, message in messages %}
+				<div class="alert alert-{{ 'info' if category=='info' else ('success' if category=='success' else ('error' if category=='error' else 'neutral')) }} shadow-lg">
+					<div>{{ message }}</div>
+				</div>
+				{% endfor %}
+			</div>
+			{% endif %} {% endwith %} {% block content %}{% endblock %}
+		</main>
 
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(45deg, #667eea, #764ba2);
-      border-radius: 4px;
-    }
+		<footer class="footer footer-center bg-base-100/80 border-t border-base-300 py-6 text-base-content/70">
+			<aside>
+				<p class="text-sm">&copy; {{ current_year if current_year is defined else '' }} Project Nexus — Crafted for a clean campus experience.</p>
+			</aside>
+		</footer>
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(45deg, #5a67d8, #6b46c1);
-    }
+		<!-- Global Scripts -->
+		<script>
+			// Theme management - centralized
+			function toggleTheme() {
+				const html = document.documentElement;
+				const currentTheme = html.getAttribute("data-theme");
+				const newTheme = currentTheme === "dark" ? "light" : "dark";
+				html.setAttribute("data-theme", newTheme);
+				localStorage.setItem("theme", newTheme);
+				const themeController = document.querySelector(".theme-controller");
+				if (themeController) themeController.checked = newTheme === "dark";
+			}
 
-    /* Smooth transitions */
-    * {
-      transition: all 0.3s ease;
-    }
+			document.addEventListener("DOMContentLoaded", function () {
+				const savedTheme = localStorage.getItem("theme") || "light"; // default to light
+				document.documentElement.setAttribute("data-theme", savedTheme);
+				const controllers = document.querySelectorAll(".theme-controller");
+				if (controllers.length) {
+					controllers.forEach((ctrl) => (ctrl.checked = savedTheme === "dark"));
+					controllers.forEach((ctrl) => ctrl.addEventListener("change", toggleTheme));
+				}
+			});
 
-    /* Loading animation */
-    .loading {
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
-    }
+			function showToast(message, type = "info") {
+				const toast = document.createElement("div");
+				toast.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-sm shadow-lg`;
+				toast.innerHTML = `
+          <span>${message}</span>
+          <button class="btn btn-sm btn-circle btn-ghost" onclick="this.parentElement.remove()">×</button>
+        `;
+				document.body.appendChild(toast);
+				setTimeout(() => toast.remove(), 5000);
+			}
+		</script>
 
-    @keyframes loading {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-  </style>
-
-  {% block extra_head %}{% endblock %}
-</head>
-
-<body class="bg-base-100 text-base-content min-h-screen">
-  <!-- Skip to main content for accessibility -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-white px-4 py-2 rounded-lg z-50">
-    Skip to main content
-  </a>
-
-  {% block content %}{% endblock %}
-
-  <!-- Global Scripts -->
-  <script>
-    // Theme management
-    function initTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    }
-
-    // Initialize theme on load
-    document.addEventListener('DOMContentLoaded', initTheme);
-
-    // Loading states
-    function showLoading(element) {
-      element.classList.add('loading');
-    }
-
-    function hideLoading(element) {
-      element.classList.remove('loading');
-    }
-
-    // Toast notifications
-    function showToast(message, type = 'info') {
-      const toast = document.createElement('div');
-      toast.className = `alert alert-${type} fixed top-4 right-4 z-50 max-w-sm shadow-lg`;
-      toast.innerHTML = `
-        <span>${message}</span>
-        <button class="btn btn-sm btn-circle btn-ghost" onclick="this.parentElement.remove()">×</button>
-      `;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 5000);
-    }
-  </script>
-
-  {% block scripts %}{% endblock %}
-</body>
-
+		{% block scripts %}{% endblock %}
+	</body>
 </html>

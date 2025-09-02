@@ -1,152 +1,25 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Login - KampusConnect{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <!-- Header -->
-    <div class="text-center">
-      <div class="mx-auto w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-        <i class="fas fa-graduation-cap text-white text-2xl"></i>
-      </div>
-      <h2 class="text-3xl font-bold text-base-content mb-2">Welcome Back</h2>
-      <p class="text-base-content/70">Sign in to your KampusConnect account</p>
+<div class="card">
+  <h2>Login</h2>
+  <p class="muted">Sign in to continue</p>
+
+  <form method="post" style="margin-top:.75rem">
+    <div style="margin-bottom:.5rem">
+      <label for="username">Username or email</label>
+      <input id="username" name="username" required class="" style="width:100%;padding:.5rem;margin-top:.25rem;border:1px solid #e6e6e6;border-radius:6px">
     </div>
-
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="space-y-2">
-      {% for category, message in messages %}
-      <div class="alert alert-{{ 'success' if category == 'success' else 'error' if category == 'error' else 'info' }} shadow-lg">
-        <span>{{ message }}</span>
-      </div>
-      {% endfor %}
+    <div style="margin-bottom:.5rem">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" required class="" style="width:100%;padding:.5rem;margin-top:.25rem;border:1px solid #e6e6e6;border-radius:6px">
     </div>
-    {% endif %}
-    {% endwith %}
-
-    <!-- Login Form -->
-    <div class="bg-base-100 rounded-2xl shadow-2xl p-8 border border-base-300">
-      <form method="POST" class="space-y-6">
-        <div>
-          <label for="username" class="block text-sm font-semibold text-base-content mb-2">
-            Username or Email
-          </label>
-          <div class="relative">
-            <input
-              type="text"
-              id="username"
-              name="username"
-              required
-              class="input input-bordered w-full pl-12 pr-4 py-3 rounded-xl focus:input-primary transition-all duration-300"
-              placeholder="Enter your username or email"
-            />
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <i class="fas fa-user text-base-content/50"></i>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <label for="password" class="block text-sm font-semibold text-base-content mb-2">
-            Password
-          </label>
-          <div class="relative">
-            <input
-              type="password"
-              id="password"
-              name="password"
-              required
-              class="input input-bordered w-full pl-12 pr-12 py-3 rounded-xl focus:input-primary transition-all duration-300"
-              placeholder="Enter your password"
-            />
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <i class="fas fa-lock text-base-content/50"></i>
-            </div>
-            <button
-              type="button"
-              class="absolute inset-y-0 right-0 pr-4 flex items-center"
-              onclick="togglePassword()"
-            >
-              <i id="password-icon" class="fas fa-eye text-base-content/50 hover:text-base-content/70"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between">
-          <label class="cursor-pointer label">
-            <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" />
-            <span class="label-text ml-2">Remember me</span>
-          </label>
-          <a href="#" class="text-primary hover:text-primary-focus font-medium text-sm">
-            Forgot password?
-          </a>
-        </div>
-
-        <button
-          type="submit"
-          class="btn btn-primary w-full py-3 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-        >
-          <i class="fas fa-sign-in-alt mr-2"></i>
-          Sign In
-        </button>
-      </form>
-
-      <!-- Divider -->
-      <div class="divider my-6">OR</div>
-
-      <!-- Social Login (Optional) -->
-      <div class="space-y-3">
-        <button class="btn btn-outline w-full rounded-xl hover:bg-red-50 hover:border-red-300 hover:text-red-600 transition-all duration-300">
-          <i class="fab fa-google mr-2"></i>
-          Continue with Google
-        </button>
-        <button class="btn btn-outline w-full rounded-xl hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 transition-all duration-300">
-          <i class="fab fa-facebook mr-2"></i>
-          Continue with Facebook
-        </button>
-      </div>
-
-      <!-- Register Link -->
-      <div class="text-center mt-6">
-        <p class="text-base-content/70">
-          Don't have an account?
-          <a href="{{ url_for('auth.register') }}" class="text-primary hover:text-primary-focus font-semibold ml-1">
-            Create one here
-          </a>
-        </p>
-      </div>
+    <div class="actions">
+      <button class="btn" type="submit">Sign in</button>
+      <a href="{{ url_for('auth.register') }}" class="btn">Register</a>
     </div>
-
-    <!-- Footer -->
-    <div class="text-center text-sm text-base-content/50">
-      <p>© 2025 KampusConnect. All rights reserved.</p>
-    </div>
-  </div>
+  </form>
 </div>
-
-<script>
-  function togglePassword() {
-    const passwordInput = document.getElementById('password');
-    const icon = document.getElementById('password-icon');
-
-    if (passwordInput.type === 'password') {
-      passwordInput.type = 'text';
-      icon.classList.remove('fa-eye');
-      icon.classList.add('fa-eye-slash');
-    } else {
-      passwordInput.type = 'password';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
-    }
-  }
-
-  // Auto-focus on username field
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('username').focus();
-  });
-</script>
-
 {% endblock %}

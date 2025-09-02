@@ -10,6 +10,8 @@ from flask import (
     current_app,
 )
 import os
+from datetime import datetime
+from werkzeug.utils import secure_filename
 
 from website.models import db, Note
 
@@ -29,7 +31,11 @@ def notes_list():
     query = Note.query
 
     if semester:
-        query = query.filter_by(semester=semester)
+        try:
+            sem_int = int(semester)
+            query = query.filter_by(semester=sem_int)
+        except ValueError:
+            flash("Invalid semester filter ignored.", "info")
 
     if subject:
         query = query.filter_by(subject=subject)
@@ -46,31 +52,54 @@ def notes_upload():
         return redirect(url_for("resources.notes_list"))
 
     if request.method == "POST":
-        title = request.form["title"]
+        title = request.form.get("title", "").strip()
+        description = request.form.get("description", "").strip() or None
+        semester_raw = request.form.get("semester", "").strip()
+        subject = request.form.get("subject", "").strip()
+        file = request.files.get("file")
 
-        description = request.form.get("description")
-        semester = request.form["semester"]
+        # Basic validation
+        if not title or not semester_raw or not subject:
+            flash("Title, semester, and subject are required.", "error")
+            return redirect(request.url)
 
-        subject = request.form["subject"]
-        file = request.files["file"]
+        try:
+            semester_val = int(semester_raw)
+        except ValueError:
+            flash("Semester must be a number.", "error")
+            return redirect(request.url)
 
-        if not file:
+        if not file or not file.filename:
             flash("No file selected.", "error")
             return redirect(request.url)
 
-        filename = file.filename
-        upload_folder = os.path.join(current_app.root_path, "static", "uploads")
+        # Allowed file extensions
+        allowed_ext = {"pdf", "doc", "docx", "ppt", "pptx", "txt", "jpg", "jpeg", "png"}
+        ext = file.filename.rsplit(".", 1)[-1].lower() if "." in file.filename else ""
+        if ext not in allowed_ext:
+            flash("Unsupported file type.", "error")
+            return redirect(request.url)
 
+        filename = secure_filename(file.filename)
+        upload_folder = os.path.join(current_app.root_path, "static", "uploads")
         os.makedirs(upload_folder, exist_ok=True)
 
-        file_path = os.path.join(upload_folder, filename)
-        file.save(file_path)
+        # Avoid collisions: append timestamp if file exists
+        base, extension = os.path.splitext(filename)
+        candidate = filename
+        dest_path = os.path.join(upload_folder, candidate)
+        if os.path.exists(dest_path):
+            stamp = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")
+            candidate = f"{base}_{stamp}{extension}"
+            dest_path = os.path.join(upload_folder, candidate)
+
+        file.save(dest_path)
 
         note = Note(
             title=title,
             description=description,
-            file_url=f"/static/uploads/{filename}",
-            semester=semester,
+            file_url=f"/static/uploads/{candidate}",
+            semester=semester_val,
             subject=subject,
             uploaded_by=current_user.id,
         )
